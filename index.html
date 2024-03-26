@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <title>Custom Canvas & Text Fields</title>
+            <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        
+        <div>
+            <label for="canvasWidth">Canvas Width:</label>
+            <input type="number" id="canvasWidth" value="590"> <!-- Default value -->
+                <label for="canvasHeight">Canvas Height:</label>
+                <input type="number" id="canvasHeight" value="200"> <!-- Default value 1278 -->
+        </div>
+        
+        <canvas id="animCanvas">
+            Your browser does not support the canvas element.
+        </canvas>
+        <br>
+        <div id="profiles">
+        </div>
+        <div id="textFields">
+            <input type="text" placeholder="Enter some text..."/>
+            <input type="text" placeholder="Enter some more text..."/>
+                    <!-- Add more text fields as needed -->
+        </div>
+        
+        <!-- The profile code (images and names) -->
+        <script src="profile.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
+
