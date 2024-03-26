@@ -1,3 +1,6 @@
+import {Profile, updateProfileDiv} from './profile.js';
+import {playAnimationFromStart, drawFrame} from './animation.js';
+
 // All chat messages, whether on screen yet or not
 var allChatMessages = [];
 // The image/name pairs that are displayed
@@ -8,13 +11,6 @@ chatProfiles.push(new Profile('Chad', './char2.svg'));
 chatProfiles.push(new Profile('Tischman', './char3.svg'));
 
 document.addEventListener('DOMContentLoaded', () => {
-    /**
-     * Play animation from start
-     */
-    function playAnimationFromStart() {
-        
-    }
-    
     /**
      * Onchange of the canvas size inputs. Change the canvas size,
      * or log to console if either size input is non-numeric
@@ -45,10 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setCanvasSize();
     });
     
-    
     /**
      * Onload
      */
     setCanvasSize();
     updateProfileDiv(document.getElementById("profiles"), chatProfiles);
+    window.requestAnimationFrame(drawFrame);
 });

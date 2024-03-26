@@ -1,7 +1,7 @@
 /**
  * Profile class, with the profile image, and a name
  */
-class Profile {
+export class Profile {
     constructor(profileName, imageLink) {
         this.profileName = profileName;
         this.imageLink = imageLink;
@@ -33,7 +33,7 @@ class Profile {
  * @param divElement    The div element to show the profiles in
  * @param profiles      An array of profile classes to fill the element with
  */
-function updateProfileDiv(divElement, profiles) {
+export function updateProfileDiv(divElement, profiles) {
     // Empty the div element
     divElement.innerHTML = '';
     
