@@ -1,10 +1,13 @@
+import { playAnimationFromStart } from './animation.js'
+
 /**
  * Profile class, with the profile image, and a name
  */
 export class Profile {
-    constructor(profileName, imageLink) {
+    constructor(profileName, imageLink, color = '#d8d8d8') {
         this.profileName = profileName;
         this.imageLink = imageLink;
+        this.color = color;
     }
     
     // Get the profile name
@@ -56,8 +59,26 @@ export function updateProfileDiv(divElement, profiles) {
         profileDiv.appendChild(img);
         profileDiv.appendChild(text);
         
+        // Add a message color picker
+        const picker = document.createElement('input');
+        picker.type = 'color';
+        picker.value = profile.color;
+        profileDiv.appendChild(picker);
+        profile.picker = picker;
+        
+        const alpha = document.createElement('input');
+        alpha.type = 'range';
+        alpha.value = 1.0;
+        alpha.max = 1.0;
+        alpha.step = 0.01;
+        alpha.min = 0.0;
+        profileDiv.appendChild(alpha);
+        profile.alpha = alpha;
+        
         // Append the profile div to the main div element
         divElement.appendChild(profileDiv);
+        
+        
         
     
         
@@ -85,5 +106,6 @@ export function updateProfileDiv(divElement, profiles) {
             });
             fileInput.click();
         });
+    
     }
 }

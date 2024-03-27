@@ -20,12 +20,14 @@ var frameRate = 60;
 var canvas = document.getElementById("animCanvas");
 
 // How long the messages should spend sliding onto the screen
-var animationDurationMessageSlideUp = 3.0;
+var animationDurationMessageSlideUp = 0.5;
 // How long the messages should spend stationary
-var animationDurationMessageHold = 3.0;
+var animationDurationMessageHold = 2.0;
 var chatBubbleWidthPercent = 0.70;
-var chatBubbleSpacingPixels = 5;
-var currentMessageIndex = 0;
+var chatBubbleSpacingPixels = 20;
+// Set to -1 as a reset flag for chat messages. This happens in the drawFrame function
+// which has access to the chat messages.
+var currentMessageIndex = -1;
 
 
 /**
@@ -38,6 +40,18 @@ export function drawFrame(allChatMessages) {
     const ctx = canvas.getContext("2d");
     clearCanvas(ctx);
     
+    // Reset the message positions
+    if (currentMessageIndex === -1) {
+        // resetMessagePositions
+        for (var i = 0; i < allChatMessages.length; i++) {
+            allChatMessages[i].desiredPosition = 1.1;
+            allChatMessages[i].actualPosition = 1.1;
+            allChatMessages[i].startPosition = 1.1;
+        }
+        currentMessageIndex = 0;
+    }
+    
+    
     var {idxOfMessagesOnScreen, timeIntoThisMessage} = getOnScreenMessageIndex(allChatMessages);
     if (currentMessageIndex != idxOfMessagesOnScreen) {
         currentMessageIndex = idxOfMessagesOnScreen
@@ -47,9 +61,6 @@ export function drawFrame(allChatMessages) {
         }
     }
     
-    
-    ctx.fillStyle = "rgb(127 0 0 / 40%)";
-    ctx.strokeStyle = ctx.fillStyle;
     layout(allChatMessages, frameNumber / frameRate, canvas);
     drawAllTextBubbles(ctx, allChatMessages, canvas);
     
@@ -58,12 +69,7 @@ export function drawFrame(allChatMessages) {
         if (recording) {
             finishedRecording();
         }
-        frameNumber = 0;
-        for (var i = 0; i < allChatMessages.length; i++) {
-            allChatMessages[i].desiredPosition = 1.1;
-            allChatMessages[i].actualPosition = 1.1;
-            allChatMessages[i].startPosition = 1.1;
-        }
+        playAnimationFromStart();
     }
 }
 
@@ -72,7 +78,7 @@ export function drawFrame(allChatMessages) {
  */
 export function playAnimationFromStart() {
     frameNumber = 0;
-    // resetMessagePositions()
+    currentMessageIndex = -1;
 }
 
 /**
@@ -111,6 +117,12 @@ function roundedRect(ctx, x, y, width, height, radius) {
 function drawTextBubble(ctx, message, left, y, canvas) {
     const bubbleWidth = Math.floor(chatBubbleWidthPercent * canvas.width);
     const startHeight = Math.floor(y * canvas.height);
+    ctx.fillStyle = message.profile.color; //"rgb(127 0 0 / 40%)";
+    if (message.profile.picker && message.profile.alpha) {
+        const color = addAlpha(message.profile.picker.value, message.profile.alpha.value);
+        ctx.fillStyle = color;
+    }
+    ctx.strokeStyle = ctx.fillStyle;
     roundedRect(ctx, 10, startHeight, bubbleWidth, message.getHeight(bubbleWidth), 20);
 }
 
@@ -161,7 +173,7 @@ function getOnScreenMessagesSize(chatMessages, canvas) {
 /**
  * Set the positions of all chatMessages
  * @param chatMessages  array of ChatMessage class
- * @param elapsedTime   time in seconds since start of animation
+ * @param elapsedTime   time in seconds since very start of animation
  * @param canvas        the canvas (for width and height)
  */
 function layout(chatMessages, elapsedTime, canvas) {
@@ -191,7 +203,7 @@ function layout(chatMessages, elapsedTime, canvas) {
     
     for (var i = 0; i < chatMessages.length; i++) {
         if (timeIntoThisMessage < animationDurationMessageSlideUp) {
-            const movePercent = timeIntoThisMessage / animationDurationMessageSlideUp;
+            const movePercent = ease(timeIntoThisMessage / animationDurationMessageSlideUp);
             const totalDist = chatMessages[i].desiredPosition - chatMessages[i].startPosition;
             chatMessages[i].actualPosition = chatMessages[i].startPosition + (totalDist * movePercent);
         } else {
@@ -199,4 +211,24 @@ function layout(chatMessages, elapsedTime, canvas) {
         }
         
     }
+}
+
+/**
+ * Add alpha value from 0-1.0 to a hex color
+ */
+function addAlpha(color, opacity) {
+    // coerce values so it is between 0 and 1.
+    var _opacity = Math.round(Math.min(Math.max(opacity ?? 1, 0), 1) * 255);
+    var opacityString = _opacity.toString(16).toUpperCase();
+    if (opacityString.length == 1) {
+        opacityString = '0' + opacityString;
+    }
+    return color + opacityString;
+}
+
+/**
+ * Transform a percentage of movement 0 to 1, to an eased percentage, 0-1
+ */
+function ease(input) {
+    return 1.0 - Math.exp(-3.14 * input);
 }

@@ -4,15 +4,17 @@ import {ChatMessage} from './chatMessage.js';
 
 // The image/name pairs that are displayed
 var chatProfiles = [];
-chatProfiles.push(new Profile('Grump', './char1.svg'));
-chatProfiles.push(new Profile('Jane', './senior-transparent.svg'));
+chatProfiles.push(new Profile('Grump', './char1.svg', '#218aff'));
+chatProfiles.push(new Profile('Jane', './senior-transparent.svg', '#d8d8d8'));
 chatProfiles.push(new Profile('Chad', './char2.svg'));
 chatProfiles.push(new Profile('Tischman', './char3.svg'));
 
 // All chat messages, whether on screen yet or not
 var allChatMessages = [];
 allChatMessages.push(new ChatMessage("Hello world", chatProfiles[0]));
-allChatMessages.push(new ChatMessage("Hello world", chatProfiles[0]));
+allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
+allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
+allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
 
 // Some glue to get the chatmessage variable into the animation module
 function drawFrameParent() {
