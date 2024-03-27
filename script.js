@@ -26,9 +26,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const newHeight = canvasHeightInput.value;
         // Check if the input is a positive number
         if (newWidth > 0 && newHeight > 0) {
-            // Set the new width of the resizable element
-            resizeableElement.style.width = newWidth + 'px';
-            resizeableElement.style.height = newHeight + 'px';
+            var existingCanvas = document.getElementById('animCanvas');
+            
+            if (existingCanvas) {
+                // Get the parent element of the canvas
+                var parentElement = existingCanvas.parentNode;
+                
+                // Remove the existing canvas from the DOM
+                parentElement.removeChild(existingCanvas);
+                
+                parentElement.innerHTML = '<canvas id="animCanvas" width="' + newWidth + '" height="' + newHeight+ '"></canvas>';
+            }
         } else {
             console.log("Invalid value for canvas size");
         }

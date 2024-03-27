@@ -1,6 +1,5 @@
 import {playAnimationFromStart} from './animation.js';
 
-const canvas = document.querySelector("#animCanvas");
 const recordWebmButton = document.querySelector("#saveWebmButton");
 const recordMp4Button = document.querySelector("#saveMp4Button");
 
@@ -22,9 +21,18 @@ recordMp4Button.addEventListener("click", (clickEvent) => {
 });
 
 function startRecording() {
+    const canvas = document.querySelector("#animCanvas");
+    if (!MediaRecorder.isTypeSupported(mimeType)) {
+        alert("Video type not supported by user");
+        return;
+    }
     recording = true;
     const stream = canvas.captureStream(25);
-    const options = { mimeType: mimeType };
+    var options = { mimeType: mimeType,
+        type: 'video',
+        width: 200,
+        height: 700
+    };
     mediaRecorder = new MediaRecorder(stream, options);
     recordedChunks = [];
     mediaRecorder.ondataavailable = e => {

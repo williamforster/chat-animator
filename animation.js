@@ -1,18 +1,17 @@
 import { recording, finishedRecording } from './recording.js';
-
-const canvas = document.getElementById("animCanvas");
 var frameNumber = 0
-
+var canvas = document.getElementById("animCanvas");
 /**
  * Draw a frame on the canvas.
  * To be called by window.requestAnimationFrame in script.js
  */
 export function drawFrame() {
+    canvas = document.getElementById("animCanvas");
     const ctx = canvas.getContext("2d");
     clearCanvas(ctx);
     
     ctx.fillStyle = "rgb(127 0 0 / 40%)";
-    ctx.fillRect(frameNumber, 0, 40, 24);
+    ctx.fillRect(frameNumber, 0, canvas.width - frameNumber * 2, 24);
     
     frameNumber += 1;
     if (frameNumber > 300) {
