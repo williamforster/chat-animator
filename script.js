@@ -1,14 +1,24 @@
 import {Profile, updateProfileDiv} from './profile.js';
 import {playAnimationFromStart, drawFrame} from './animation.js';
+import {ChatMessage} from './chatMessage.js';
 
-// All chat messages, whether on screen yet or not
-var allChatMessages = [];
 // The image/name pairs that are displayed
 var chatProfiles = [];
 chatProfiles.push(new Profile('Grump', './char1.svg'));
 chatProfiles.push(new Profile('Jane', './senior-transparent.svg'));
 chatProfiles.push(new Profile('Chad', './char2.svg'));
 chatProfiles.push(new Profile('Tischman', './char3.svg'));
+
+// All chat messages, whether on screen yet or not
+var allChatMessages = [];
+allChatMessages.push(new ChatMessage("Hello world", chatProfiles[0]));
+allChatMessages.push(new ChatMessage("Hello world", chatProfiles[0]));
+
+// Some glue to get the chatmessage variable into the animation module
+function drawFrameParent() {
+    drawFrame(allChatMessages);
+    window.requestAnimationFrame(drawFrameParent);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     /**
@@ -54,5 +64,5 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     setCanvasSize();
     updateProfileDiv(document.getElementById("profiles"), chatProfiles);
-    window.requestAnimationFrame(drawFrame);
+    window.requestAnimationFrame(drawFrameParent);
 });
