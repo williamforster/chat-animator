@@ -1,5 +1,5 @@
 import {Profile, updateProfileDiv} from './profile.js';
-import {playAnimationFromStart, drawFrame} from './animation.js';
+import {playAnimationFromStart, drawFrame, AnimationSettings} from './animation.js';
 import {ChatMessage} from './chatMessage.js';
 
 // The image/name pairs that are displayed
@@ -16,9 +16,11 @@ allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
 allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
 allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
 
+var animationSettings = new AnimationSettings();
+
 // Some glue to get the chatmessage variable into the animation module
 function drawFrameParent() {
-    drawFrame(allChatMessages);
+    drawFrame(allChatMessages, animationSettings);
     window.requestAnimationFrame(drawFrameParent);
 }
 
@@ -31,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvasWidthInput = document.getElementById('canvasWidth');
     const canvasHeightInput = document.getElementById('canvasHeight');
     const resizeableElement = document.getElementById('animCanvas');
+    const animationDurationInput = document.getElementById('animationDuration');
+    const holdDurationInput = document.getElementById('holdDuration');
+    const startDelayInput = document.getElementById('startDelay');
     
     function setCanvasSize() {
         // Get the current value of the input field
@@ -59,6 +64,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     canvasHeightInput.addEventListener('input', function() {
         setCanvasSize();
+    });
+    animationDurationInput.value = animationSettings.durationMessageSlideUp;
+    animationDurationInput.addEventListener('input', function() {
+        if (Number(animationDurationInput.value)) {
+            animationSettings.durationMessageSlideUp = Number(animationDurationInput.value);
+            playAnimationFromStart();
+            //console.log(`Set animDuration ${animationDurationInput.value}`);
+        }
+    });
+    holdDurationInput.value = animationSettings.durationMessageHold;
+    holdDurationInput.addEventListener('input', function() {
+        if (Number(holdDurationInput.value)) {
+            animationSettings.durationMessageHold = Number(holdDurationInput.value);
+            playAnimationFromStart();
+        }
+    });
+    startDelayInput.value = animationSettings.startDelay;
+    startDelayInput.addEventListener('input', function() {
+        if (Number(startDelayInput.value)) {
+            animationSettings.startDelay = Number(startDelayInput.value);
+            playAnimationFromStart();
+        }
     });
     
     /**
