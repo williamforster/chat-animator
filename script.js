@@ -1,5 +1,5 @@
 import {Profile, updateProfileDiv} from './profile.js';
-import {playAnimationFromStart, drawFrame, AnimationSettings} from './animation.js';
+import {playAnimationFromStart, drawFrame, AnimationSettings, addAlpha} from './animation.js';
 import {ChatMessage} from './chatMessage.js';
 
 // The image/name pairs that are displayed
@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const holdDurationInput = document.getElementById('holdDuration');
     const startDelayInput = document.getElementById('startDelay');
     const fontInput = document.getElementById('font');
+    const showNamesInput = document.getElementById('showNames');
+    const backColorInput = document.getElementById('backColor');
+    const backAlphaInput = document.getElementById('backAlpha');
     const newMessageButton = document.getElementById('newMessage');
     
     function setCanvasSize() {
@@ -94,6 +97,19 @@ document.addEventListener('DOMContentLoaded', () => {
         var parts = fontInput.value.replace('px', '').split(' ');
         animationSettings.lineHeight = Number(parts[0]) * 1.2;
         playAnimationFromStart();
+    });
+    showNamesInput.addEventListener('input', () => {
+        animationSettings.showNames = showNamesInput.checked;
+    });
+    function updateBackcolor() {
+        animationSettings.backColor = addAlpha(backColorInput.value,
+                                               backAlphaInput.value);
+    }
+    backColorInput.addEventListener('input', () => {
+        updateBackcolor();
+    });
+    backAlphaInput.addEventListener('input', () => {
+        updateBackcolor();
     });
     newMessageButton.addEventListener('click', () => {
         allChatMessages.push(new ChatMessage("", chatProfiles[0]));

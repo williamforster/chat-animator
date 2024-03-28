@@ -25,7 +25,7 @@ export class AnimationSettings {
     durationMessageSlideUp = 0.5;
     // How long the messages should spend stationary
     durationMessageHold = 0.5;
-    chatBubbleWidthPercent = 0.70;
+    chatBubbleWidthPercent = 0.65;
     chatBubbleSpacingPixels = 20;
     // Text inset as a fraction of the total chat bubble width
     textInsetWidth = 0.06;
@@ -36,6 +36,11 @@ export class AnimationSettings {
     // pixels between vertical lines of text
     lineHeight = 20;
     font = "16px sans-serif";
+    // Show names beside messages or do not show names
+    showNames = true;
+    nameSizePercent = 0.10;
+    
+    backColor = "#ffffff00";
 }
 
 // Set to -1 as a reset flag for chat messages. This happens in the drawFrame function
@@ -53,7 +58,7 @@ var currentMessageIndex = -1;
 export function drawFrame(allChatMessages, animationSettings) {
     canvas = document.getElementById("animCanvas");
     const ctx = canvas.getContext("2d");
-    clearCanvas(ctx);
+    clearCanvas(ctx, canvas, animationSettings);
     
     // Reset the message positions
     if (currentMessageIndex === -1) {
@@ -100,9 +105,14 @@ export function playAnimationFromStart() {
 /**
  * Clear the canvas
  * @param context      the drawing context
+ * @param canvas        the canvas element
+ * @param animationSettings     yep
  */
-function clearCanvas(context) {
+function clearCanvas(context, canvas, animationSettings) {
     context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = animationSettings.backColor;
+    context.rect(0,0,canvas.width, canvas.height);
+    context.fill();
 }
 
 /**
@@ -117,8 +127,6 @@ function roundedRect(ctx, x, y, width, height, radius) {
     ctx.arcTo(x, y, x, y + radius, radius);
     ctx.stroke();
     ctx.fill();
-    
-    //console.log(`Drawing rect ${x} ${y} ${width} ${height}`);
 }
 
 /**
@@ -138,15 +146,23 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     const textWidth = bubbleWidth - 2 * textInsetWidth;
     
     const startHeight = Math.floor(y * canvas.height);
-    ctx.fillStyle = '#d8d8d8'; //"rgb(127 0 0 / 40%)";
+    ctx.fillStyle = '#d8d8d8';
     if (message.profile.picker && message.profile.alpha) {
         const color = addAlpha(message.profile.picker.value, message.profile.alpha.value);
         ctx.fillStyle = color;
     }
     ctx.strokeStyle = ctx.fillStyle;
     var xPos = 10;
-    if (left) {
+    if (!left) {
         xPos = canvas.width - 10 - bubbleWidth;
+    }
+    const nameSizePixels = canvas.width * animationSettings.nameSizePercent;
+    if (animationSettings.showNames) {
+        if (!left) {
+            xPos -= nameSizePixels;
+        } else {
+            xPos += nameSizePixels;
+        }
     }
     
     ctx.font = animationSettings.font;
@@ -162,6 +178,10 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
                     startHeight + textInsetHeight,
                     textWidth,
                     animationSettings.lineHeight);
+    
+    // Draw name
+    const bottomHeight = startHeight + messageHeight;
+    drawName(ctx, message, bottomHeight, canvas, animationSettings);
 }
 
 /**
@@ -176,7 +196,7 @@ function drawAllTextBubbles(ctx, messages, canvas, animationSettings) {
     for (var message of messages) {
         drawTextBubble(ctx,
                        message,
-                       message.profile.isMainPerson,
+                       !message.profile.isMainPerson,
                        message.actualPosition,
                        canvas,
                        animationSettings);
@@ -276,7 +296,7 @@ function layout(ctx, chatMessages, elapsedTime, canvas, animationSettings) {
 /**
  * Add alpha value from 0-1.0 to a hex color
  */
-function addAlpha(color, opacity) {
+export function addAlpha(color, opacity) {
     // coerce values so it is between 0 and 1.
     var _opacity = Math.round(Math.min(Math.max(opacity ?? 1, 0), 1) * 255);
     var opacityString = _opacity.toString(16).toUpperCase();
@@ -307,7 +327,8 @@ function wrapTextAndDraw(ctx, text, x, y, maxWidth, lineHeight) {
     // Split the initial text into words.
     var words = text.split(' ');
     var line = '';
-    
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
     for(var n = 0; n < words.length; n++) {
         // Test line with next word
         var testLine = line + words[n] + ' ';
@@ -326,4 +347,31 @@ function wrapTextAndDraw(ctx, text, x, y, maxWidth, lineHeight) {
     }
     // Draw any remaining text
     ctx.fillText(line, x, y);
+}
+
+/**
+ * Draw the name next to a text bubble.
+ * @param ctx       the context
+ * @param message   a ChatMessage object
+ * @param bottomHeight   the y pixel baseline to draw from
+ * @param canvas    the canvas element
+ * @param animationSettings object of class AnimationSettings
+ */
+function drawName(ctx, message, bottomHeight, canvas, animationSettings) {
+    const nameSizePixels = canvas.width * animationSettings.nameSizePercent;
+    ctx.fillStyle = '#999999';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    
+    const nudge = 5;
+    
+    ctx.scale(0.5,0.5);
+    if (animationSettings.showNames) {
+        var centerX = (nameSizePixels / 2) + nudge;
+        if (message.profile.isMainPerson) {
+            centerX = canvas.width - centerX;
+        }
+        ctx.fillText(message.profile.profileName, centerX * 2, bottomHeight * 2);
+    }
+    ctx.scale(2,2);
 }

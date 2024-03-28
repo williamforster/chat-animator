@@ -57,13 +57,9 @@ export function updateProfileDiv(divElement, profiles) {
         img.src = profile.getImageLink();
         img.alt = profile.getProfileName();
         img.className = "profilePic";
-        
-        // Create a text node for the profile name
-        const text = document.createTextNode(profile.getProfileName());
-        
-        // Append the img and text to the profile div
+        // Append the img to the profile div
         profileDiv.appendChild(img);
-        profileDiv.appendChild(text);
+        
         
         // Add a message color picker
         const picker = document.createElement('input');
@@ -87,6 +83,16 @@ export function updateProfileDiv(divElement, profiles) {
         textPicker.value = profile.color;
         profileDiv.appendChild(textPicker);
         profile.textPicker = textPicker;
+        
+        // Create a text node for the profile name
+        const text = document.createElement('input');
+        text.type = 'text';
+        text.value = profile.profileName;
+        const profileClosure = profile;
+        text.addEventListener('change', (e) => {
+            profileClosure.profileName = text.value;
+        });
+        profileDiv.appendChild(text);
         
         // Append the profile div to the main div element
         divElement.appendChild(profileDiv);
