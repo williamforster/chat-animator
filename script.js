@@ -13,8 +13,8 @@ chatProfiles.push(new Profile('Tischman', './char3.svg'));
 var allChatMessages = [];
 allChatMessages.push(new ChatMessage("Hello world", chatProfiles[0]));
 allChatMessages.push(new ChatMessage("Hello world this is a longer message.", chatProfiles[1]));
-allChatMessages.push(new ChatMessage("Hello world 😃", chatProfiles[1]));
-allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
+allChatMessages.push(new ChatMessage("Hello world 😃", chatProfiles[2]));
+allChatMessages.push(new ChatMessage("Hello world", chatProfiles[3]));
 
 var animationSettings = new AnimationSettings();
 
@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const holdDurationInput = document.getElementById('holdDuration');
     const startDelayInput = document.getElementById('startDelay');
     const fontInput = document.getElementById('font');
+    const newMessageButton = document.getElementById('newMessage');
     
     function setCanvasSize() {
         // Get the current value of the input field
@@ -94,7 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         animationSettings.lineHeight = Number(parts[0]) * 1.2;
         playAnimationFromStart();
     });
-    
+    newMessageButton.addEventListener('click', () => {
+        allChatMessages.push(new ChatMessage("", chatProfiles[0]));
+        setupTextEntry();
+        playAnimationFromStart();
+    });
     
     /**
      * Onload
@@ -112,6 +117,7 @@ function setupTextEntry() {
     const textEntryDiv = document.getElementById("textFields");
     textEntryDiv.innerHTML = '';
     for (var i = 0; i < allChatMessages.length; i++) {
+        const chatMsg = allChatMessages[i];
         const selectInput = document.createElement('select');
         for (var profile of chatProfiles) {
             const selectOption = document.createElement('option');
@@ -124,12 +130,10 @@ function setupTextEntry() {
         allChatMessages[i].selectInput = selectInput;
         
         selectInput.addEventListener('input', () => {
-            for (var msg of allChatMessages) {
-                for (var profile of chatProfiles) {
-                    if (profile.profileName == msg.selectInput.value) {
-                        msg.profile = profile;
-                        break;
-                    }
+            for (var profile of chatProfiles) {
+                if (profile.profileName == chatMsg.selectInput.value) {
+                    chatMsg.profile = profile;
+                    break;
                 }
             }
             playAnimationFromStart();
@@ -142,13 +146,22 @@ function setupTextEntry() {
         textInput.id = i;
         allChatMessages[i].textInput = textInput
         textInput.addEventListener('input', () => {
-            for (var msg of allChatMessages) {
-                msg.message = msg.textInput.value;
-            }
+            chatMsg.message = textInput.value;
             playAnimationFromStart();
         });
         textEntryDiv.appendChild(textInput);
         
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = "-";
+        allChatMessages[i].deleteButton = deleteButton;
+        deleteButton.addEventListener('click', (e) => {
+            const index = allChatMessages.indexOf(chatMsg);
+            console.log(index);
+            allChatMessages.splice(index, 1);
+            playAnimationFromStart();
+            setupTextEntry();
+        });
+        textEntryDiv.appendChild(deleteButton);
         
         textEntryDiv.appendChild(document.createElement('br'));
     }

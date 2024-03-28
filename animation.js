@@ -212,7 +212,7 @@ function getOnScreenMessagesSize(ctx, chatMessages, canvas, animationSettings) {
     var totalSize = 0;
     if (currentMessageIndex >= chatMessages.length || currentMessageIndex < 0) {
         console.log("Error in animation.js: getOnScreenMessagesSize");
-        return 0;
+        return 20;
     }
     const bubbleWidth = canvas.width * animationSettings.chatBubbleWidthPercent;
     for (var i = 0; i <= currentMessageIndex; i++) {
