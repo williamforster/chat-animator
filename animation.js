@@ -19,8 +19,9 @@ var frameNumber = 0;
 var frameRate = 60;
 var canvas = document.getElementById("animCanvas");
 
+
 // How long the messages should spend sliding onto the screen
-var animationDurationMessageSlideUp = 0.5;
+var animationDurationMessageSlideUp = 1.3;
 // How long the messages should spend stationary
 var animationDurationMessageHold = 2.0;
 var chatBubbleWidthPercent = 0.70;
@@ -28,6 +29,8 @@ var chatBubbleSpacingPixels = 20;
 // Set to -1 as a reset flag for chat messages. This happens in the drawFrame function
 // which has access to the chat messages.
 var currentMessageIndex = -1;
+// Delay at the start (and end) of animation
+var startDelay = 2.0;
 
 
 /**
@@ -48,14 +51,13 @@ export function drawFrame(allChatMessages) {
             allChatMessages[i].actualPosition = 1.1;
             allChatMessages[i].startPosition = 1.1;
         }
-        currentMessageIndex = 0;
     }
     
     
     var {idxOfMessagesOnScreen, timeIntoThisMessage} = getOnScreenMessageIndex(allChatMessages);
     if (currentMessageIndex != idxOfMessagesOnScreen) {
         currentMessageIndex = idxOfMessagesOnScreen
-     // set all the start positions
+        // set all the start positions
         for (var i = 0; i <= currentMessageIndex; i++) {
             allChatMessages[i].startPosition = allChatMessages[i].actualPosition;
         }
@@ -65,7 +67,10 @@ export function drawFrame(allChatMessages) {
     drawAllTextBubbles(ctx, allChatMessages, canvas);
     
     frameNumber += 1;
-    if (frameNumber > frameRate * 20.0) {
+    const finishTime = allChatMessages.length *
+            (animationDurationMessageHold + animationDurationMessageSlideUp) +
+            (2 * startDelay);
+    if (frameNumber > frameRate * finishTime) {
         if (recording) {
             finishedRecording();
         }
@@ -123,7 +128,11 @@ function drawTextBubble(ctx, message, left, y, canvas) {
         ctx.fillStyle = color;
     }
     ctx.strokeStyle = ctx.fillStyle;
-    roundedRect(ctx, 10, startHeight, bubbleWidth, message.getHeight(bubbleWidth), 20);
+    var xPos = 10;
+    if (left) {
+        xPos = canvas.width - 10 - bubbleWidth;
+    }
+    roundedRect(ctx, xPos, startHeight, bubbleWidth, message.getHeight(bubbleWidth), 20);
 }
 
 /**
@@ -133,7 +142,11 @@ function drawTextBubble(ctx, message, left, y, canvas) {
  */
 function drawAllTextBubbles(ctx, messages, canvas) {
     for (var message of messages) {
-        drawTextBubble(ctx, message, true, message.actualPosition, canvas);
+        drawTextBubble(ctx,
+                       message,
+                       message.profile.isMainPerson,
+                       message.actualPosition,
+                       canvas);
     }
 }
 
@@ -144,10 +157,10 @@ function drawAllTextBubbles(ctx, messages, canvas) {
  * @return {indexOfCurrentMessage, timeIntoMessageAnimation}
  */
 function getOnScreenMessageIndex(chatMessages) {
-    const elapsedTime = frameNumber / frameRate;
+    const elapsedTime = Math.max((frameNumber / frameRate) - startDelay, 0.0);
     const timePerMessage = animationDurationMessageHold + animationDurationMessageSlideUp;
     const idxOfMessagesOnScreen = Math.min(chatMessages.length - 1,
-                                           Math.floor(elapsedTime / timePerMessage));
+                    Math.floor(elapsedTime / timePerMessage));
     const startTimeThisMessage = timePerMessage * idxOfMessagesOnScreen;
     const timeIntoThisMessage = elapsedTime - startTimeThisMessage;
     return {idxOfMessagesOnScreen, timeIntoThisMessage};
@@ -230,5 +243,5 @@ function addAlpha(color, opacity) {
  * Transform a percentage of movement 0 to 1, to an eased percentage, 0-1
  */
 function ease(input) {
-    return 1.0 - Math.exp(-3.14 * input);
+    return 1.0 - Math.exp(-6 * input);
 }

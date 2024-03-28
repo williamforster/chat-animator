@@ -4,10 +4,12 @@ import { playAnimationFromStart } from './animation.js'
  * Profile class, with the profile image, and a name
  */
 export class Profile {
-    constructor(profileName, imageLink, color = '#d8d8d8') {
+    constructor(profileName, imageLink, color = '#d8d8d8',isMainPerson = false) {
         this.profileName = profileName;
         this.imageLink = imageLink;
         this.color = color;
+        // Do their texts come up on the right
+        this.isMainPerson = isMainPerson;
     }
     
     // Get the profile name
