@@ -101,5 +101,55 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     setCanvasSize();
     updateProfileDiv(document.getElementById("profiles"), chatProfiles);
+    setupTextEntry();
     window.requestAnimationFrame(drawFrameParent);
 });
+
+/**
+ * Set up the part where user enters the text that appears
+ */
+function setupTextEntry() {
+    const textEntryDiv = document.getElementById("textFields");
+    textEntryDiv.innerHTML = '';
+    for (var i = 0; i < allChatMessages.length; i++) {
+        const selectInput = document.createElement('select');
+        for (var profile of chatProfiles) {
+            const selectOption = document.createElement('option');
+            selectOption.innerHTML = profile.profileName;
+            selectOption.id = profile.profileName;
+            selectOption.value = profile.profileName;
+            selectInput.appendChild(selectOption);
+        }
+        selectInput.value = allChatMessages[i].profile.profileName;
+        allChatMessages[i].selectInput = selectInput;
+        
+        selectInput.addEventListener('input', () => {
+            for (var msg of allChatMessages) {
+                for (var profile of chatProfiles) {
+                    if (profile.profileName == msg.selectInput.value) {
+                        msg.profile = profile;
+                        break;
+                    }
+                }
+            }
+            playAnimationFromStart();
+        });
+        textEntryDiv.appendChild(selectInput);
+        
+        const textInput = document.createElement('input');
+        textInput.type = 'text';
+        textInput.value = allChatMessages[i].message;
+        textInput.id = i;
+        allChatMessages[i].textInput = textInput
+        textInput.addEventListener('input', () => {
+            for (var msg of allChatMessages) {
+                msg.message = msg.textInput.value;
+            }
+            playAnimationFromStart();
+        });
+        textEntryDiv.appendChild(textInput);
+        
+        
+        textEntryDiv.appendChild(document.createElement('br'));
+    }
+}

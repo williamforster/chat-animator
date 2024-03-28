@@ -5,11 +5,12 @@
  * As messages are added they should remain centered vertically until they fill
  * the screen and then slide up like a normal text chat.
  *
- * To do this calculation, we keep a desired y position and an
- * actual y position.
+ * To do this calculation, we keep a desired y position, an
+ * actual y position, and a start y position, updating the desired
+ * and actual every frame, and updating the start position when it's
+ * time for a new message.
  *
- * New bubbles are placed with an actual position just off screen,
- * all desired positions are updated, then eased to their new positions.
+ * New bubbles are placed with an actual position just off screen.
  */
 
 import { recording, finishedRecording } from './recording.js';
@@ -315,7 +316,7 @@ function wrapTextAndDraw(ctx, text, x, y, maxWidth, lineHeight) {
         
         // If the line is too wide, draw the current line and start a new one
         if (testWidth > maxWidth && n > 0) {
-            ctx.fillText(line, x, y);
+            ctx.fillText(line, Math.floor(x), Math.floor(y));
             line = words[n] + ' ';
             y += lineHeight;
         }

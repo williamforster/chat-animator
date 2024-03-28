@@ -5,6 +5,8 @@ import {AnimationSettings} from './animation.js';
  * A message string with associated profile
  */
 export class ChatMessage {
+    message = '';
+    profile = '';
     constructor(message, profile) {
         this.profile = profile;
         this.message = message;
