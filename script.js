@@ -12,8 +12,8 @@ chatProfiles.push(new Profile('Tischman', './char3.svg'));
 // All chat messages, whether on screen yet or not
 var allChatMessages = [];
 allChatMessages.push(new ChatMessage("Hello world", chatProfiles[0]));
-allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
-allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
+allChatMessages.push(new ChatMessage("Hello world this is a longer message.", chatProfiles[1]));
+allChatMessages.push(new ChatMessage("Hello world 😃", chatProfiles[1]));
 allChatMessages.push(new ChatMessage("Hello world", chatProfiles[1]));
 
 var animationSettings = new AnimationSettings();
@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const animationDurationInput = document.getElementById('animationDuration');
     const holdDurationInput = document.getElementById('holdDuration');
     const startDelayInput = document.getElementById('startDelay');
+    const fontInput = document.getElementById('font');
     
     function setCanvasSize() {
         // Get the current value of the input field
@@ -87,6 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
             playAnimationFromStart();
         }
     });
+    fontInput.addEventListener('input', function() {
+        animationSettings.font = fontInput.value;
+        var parts = fontInput.value.replace('px', '').split(' ');
+        animationSettings.lineHeight = Number(parts[0]) * 1.2;
+        playAnimationFromStart();
+    });
+    
     
     /**
      * Onload

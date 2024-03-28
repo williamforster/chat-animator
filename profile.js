@@ -4,10 +4,14 @@ import { playAnimationFromStart } from './animation.js'
  * Profile class, with the profile image, and a name
  */
 export class Profile {
-    constructor(profileName, imageLink, color = '#d8d8d8',isMainPerson = false) {
+    constructor(profileName, imageLink, backColor = '#d8d8d8',isMainPerson = false) {
         this.profileName = profileName;
         this.imageLink = imageLink;
-        this.color = color;
+        this.backColor = backColor;
+        this.color = '#000000';
+        if (isMainPerson) {
+            this.color = '#ffffff';
+        }
         // Do their texts come up on the right
         this.isMainPerson = isMainPerson;
     }
@@ -64,7 +68,7 @@ export function updateProfileDiv(divElement, profiles) {
         // Add a message color picker
         const picker = document.createElement('input');
         picker.type = 'color';
-        picker.value = profile.color;
+        picker.value = profile.backColor;
         profileDiv.appendChild(picker);
         profile.picker = picker;
         
@@ -76,6 +80,13 @@ export function updateProfileDiv(divElement, profiles) {
         alpha.min = 0.0;
         profileDiv.appendChild(alpha);
         profile.alpha = alpha;
+        
+        // Add a text color picker
+        const textPicker = document.createElement('input');
+        textPicker.type = 'color';
+        textPicker.value = profile.color;
+        profileDiv.appendChild(textPicker);
+        profile.textPicker = textPicker;
         
         // Append the profile div to the main div element
         divElement.appendChild(profileDiv);
