@@ -4,16 +4,25 @@ import { playAnimationFromStart } from './animation.js'
  * Profile class, with the profile image, and a name
  */
 export class Profile {
-    constructor(profileName, imageLink, backColor = '#d8d8d8',isMainPerson = false) {
+    constructor(profileName, imageLink, backColor = '#d8d8d8',isMainPerson = false, color = '#000000') {
         this.profileName = profileName;
         this.imageLink = imageLink;
         this.backColor = backColor;
-        this.color = '#000000';
-        if (isMainPerson) {
-            this.color = '#ffffff';
-        }
+        this.color = color;
         // Do their texts come up on the right
         this.isMainPerson = isMainPerson;
+        this.alphaValue = 1.0;
+    }
+    
+    // Create a copy of another profile
+    copy(otherProfile) {
+        this.profileName = otherProfile.profileName;
+        this.imageLink = otherProfile.imageLink;
+        this.image = otherProfile.image
+        this.backColor = otherProfile.backColor;
+        this.color = otherProfile.color;
+        this.isMainPerson = otherProfile.isMainPerson;
+        this.alphaValue = otherProfile.alphaValue;
     }
     
     // Get the profile name
@@ -41,13 +50,18 @@ export class Profile {
  *  Show a profile for each chatter in the div argument
  * @param divElement    The div element to show the profiles in
  * @param profiles      An array of profile classes to fill the element with
+ * @param setupTextEntry A function that alters the message
+ *                       text entry section when profiles are changed
+ * @param deleteProfile  A function that deletes given profile from global
+                        array of profiles.
  */
-export function updateProfileDiv(divElement, profiles) {
+export function updateProfileDiv(divElement, profiles, setupTextEntry, deleteProfile) {
     // Empty the div element
     divElement.innerHTML = '';
     
     // Iterate through the profiles array
     for (var profile of profiles) {
+        const profileClosure = profile;
         // Create a new div element for the profile
         const profileDiv = document.createElement('div');
         profileDiv.className = 'profile';
@@ -68,39 +82,55 @@ export function updateProfileDiv(divElement, profiles) {
         const picker = document.createElement('input');
         picker.type = 'color';
         picker.value = profile.backColor;
+        picker.addEventListener('input', () => {
+            profileClosure.backColor = picker.value;
+        });
         profileDiv.appendChild(picker);
         profile.picker = picker;
         
         const alpha = document.createElement('input');
         alpha.type = 'range';
-        alpha.value = 1.0;
         alpha.max = 1.0;
         alpha.step = 0.01;
         alpha.min = 0.0;
-        profileDiv.appendChild(alpha);
+        alpha.value = profile.alphaValue;
         profile.alpha = alpha;
+        alpha.addEventListener('input', () => {
+            profileClosure.alphaValue = alpha.value;
+        });
+        profileDiv.appendChild(alpha);
         
         // Add a text color picker
         const textPicker = document.createElement('input');
         textPicker.type = 'color';
         textPicker.value = profile.color;
-        profileDiv.appendChild(textPicker);
         profile.textPicker = textPicker;
+        textPicker.addEventListener('input', () => {
+            profileClosure.color = textPicker.value;
+        });
+        profileDiv.appendChild(textPicker);
         
         // Create a text node for the profile name
         const text = document.createElement('input');
         text.type = 'text';
         text.value = profile.profileName;
-        const profileClosure = profile;
         text.addEventListener('change', (e) => {
             profileClosure.profileName = text.value;
+            setupTextEntry();
         });
         profileDiv.appendChild(text);
         
+        
+        // Add a delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML= '-';
+        deleteButton.addEventListener('click', () => {
+            deleteProfile(profileClosure);
+        })
+        profileDiv.appendChild(deleteButton);
+        
         // Append the profile div to the main div element
         divElement.appendChild(profileDiv);
-        
-        
         
     
         const thisProfile = profile;
@@ -122,7 +152,7 @@ export function updateProfileDiv(divElement, profiles) {
                         closureProfile.setImageLink(reader.result); // Set the img src to the read file
                         img.src = reader.result;
                         closureProfile.image.src = reader.result;
-                        console.log("Updated profile image to:" + e.target.result);
+                        //console.log("Updated profile image to:" + e.target.result);
                     };
                     reader.readAsDataURL(file); // Read the file as Data URL
                 } else {

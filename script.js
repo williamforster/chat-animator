@@ -4,7 +4,7 @@ import {ChatMessage} from './chatMessage.js';
 
 // The image/name pairs that are displayed
 var chatProfiles = [];
-chatProfiles.push(new Profile('Grump', './char1.svg', '#218aff', true));
+chatProfiles.push(new Profile('Grump', './char1.svg', '#218aff', true, '#ffffff'));
 chatProfiles.push(new Profile('Jane', './senior-transparent.svg', '#d8d8d8'));
 chatProfiles.push(new Profile('Chad', './char2.svg'));
 chatProfiles.push(new Profile('Tischman', './char3.svg'));
@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showNamesInput = document.getElementById('showNames');
     const backColorInput = document.getElementById('backColor');
     const backAlphaInput = document.getElementById('backAlpha');
+    const newProfileButton = document.getElementById('newProfile');
     const newMessageButton = document.getElementById('newMessage');
     
     function setCanvasSize() {
@@ -111,6 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
     backAlphaInput.addEventListener('input', () => {
         updateBackcolor();
     });
+    newProfileButton.addEventListener('click', () => {
+        const lastProfile = chatProfiles[chatProfiles.length - 1];
+        const newProfile = new Profile('','');
+        newProfile.copy(lastProfile);
+        chatProfiles.push(newProfile);
+        updateProfileDiv(document.getElementById("profiles"), 
+                         chatProfiles,
+                         setupTextEntry,
+                         deleteProfile);
+        setupTextEntry();
+    });
     newMessageButton.addEventListener('click', () => {
         allChatMessages.push(new ChatMessage("", chatProfiles[0]));
         setupTextEntry();
@@ -121,7 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
      * Onload
      */
     setCanvasSize();
-    updateProfileDiv(document.getElementById("profiles"), chatProfiles);
+    updateProfileDiv(document.getElementById("profiles"), 
+                     chatProfiles,
+                     setupTextEntry,
+                     deleteProfile);
     setupTextEntry();
     window.requestAnimationFrame(drawFrameParent);
 });
@@ -180,5 +195,18 @@ function setupTextEntry() {
         textEntryDiv.appendChild(deleteButton);
         
         textEntryDiv.appendChild(document.createElement('br'));
+    }
+}
+
+function deleteProfile(profile) {
+    if (chatProfiles.length > 1) {
+        const index = chatProfiles.indexOf(profile);
+        chatProfiles.splice(index, 1);
+        console.log(chatProfiles.length);
+        updateProfileDiv(document.getElementById("profiles"),
+                         chatProfiles,
+                         setupTextEntry,
+                         deleteProfile);
+        setupTextEntry();
     }
 }
