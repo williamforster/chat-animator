@@ -4,7 +4,7 @@ import { playAnimationFromStart } from './animation.js'
  * Profile class, with the profile image, and a name
  */
 export class Profile {
-    constructor(profileName, imageLink, backColor = '#d8d8d8',isMainPerson = false, color = '#000000') {
+    constructor(profileName, imageLink, backColor = '#d8d8d8',isMainPerson = false, color = '#333333') {
         this.profileName = profileName;
         this.imageLink = imageLink;
         this.backColor = backColor;
@@ -90,6 +90,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         
         const alpha = document.createElement('input');
         alpha.type = 'range';
+        alpha.className = "range";
         alpha.max = 1.0;
         alpha.step = 0.01;
         alpha.min = 0.0;
@@ -113,6 +114,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         // Create a text node for the profile name
         const text = document.createElement('input');
         text.type = 'text';
+        text.className = "nameInput";
         text.value = profile.profileName;
         text.addEventListener('change', (e) => {
             profileClosure.profileName = text.value;
@@ -124,6 +126,10 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         // Add a delete button
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML= '-';
+        deleteButton.className = "deleteButton";
+        if (profile === profiles[0]) {
+            deleteButton.disabled = true;
+        }
         deleteButton.addEventListener('click', () => {
             deleteProfile(profileClosure);
         })
@@ -149,10 +155,11 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
                 if (file) {
                     const reader = new FileReader(); // Create a FileReader to read the file
                     reader.onload = function(e) {
+                        //console.log("Updated profile image to:" + e.target.result);
                         closureProfile.setImageLink(reader.result); // Set the img src to the read file
                         img.src = reader.result;
                         closureProfile.image.src = reader.result;
-                        //console.log("Updated profile image to:" + e.target.result);
+                        
                     };
                     reader.readAsDataURL(file); // Read the file as Data URL
                 } else {

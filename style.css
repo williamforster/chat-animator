@@ -1,11 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     width: 80vw;
     margin: 20px auto;
     background-color: #eee;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-#animCanvas {
-    background-color: white;
+#speedControls {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 50%;
 }
 
 .profilePic {
@@ -13,4 +24,85 @@ body {
     height: 50px;
     object-fit: cover;
     border-radius: 50%;
+}
+
+/* All sliders */
+.range {
+    width: 50px;
+}
+
+#controlsDiv {
+    margin: 0 40px;
+}
+
+#textFields {
+    margin-top: 40px;
+}
+
+#profiles {
+    width: 330px;
+    margin: 40px auto 0 auto;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+select {
+ margin: 5px 20px 0 0;
+}
+
+.nameInput {
+    width: 100px;
+}
+
+.messageInput {
+    width: 400px;
+}
+
+#saveButtons {
+    display: flex;
+    justify-content: space-around;
+}
+
+#sizeControls {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0 0 0;
+}
+
+.sizeInput {
+    width: 40px;
+}
+
+/* Buttons */
+.newThing {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.horizontalCenter {
+    display: flex;
+    justify-content: center;
+}
+
+#newProfile {
+    margin-top: -20px;
+}
+
+.deleteButton {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+}
+
+.deleteButton, .newThing {
+    color: white;
+    font-size: 10px;
+    margin: 3px 9px;
 }

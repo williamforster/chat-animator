@@ -175,6 +175,7 @@ function setupTextEntry() {
         textInput.type = 'text';
         textInput.value = allChatMessages[i].message;
         textInput.id = i;
+        textInput.className = "messageInput";
         allChatMessages[i].textInput = textInput
         textInput.addEventListener('input', () => {
             chatMsg.message = textInput.value;
@@ -184,6 +185,10 @@ function setupTextEntry() {
         
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = "-";
+        deleteButton.className = "deleteButton";
+        if (i == 0) {
+            deleteButton.disabled = true;
+        }
         allChatMessages[i].deleteButton = deleteButton;
         deleteButton.addEventListener('click', (e) => {
             const index = allChatMessages.indexOf(chatMsg);
