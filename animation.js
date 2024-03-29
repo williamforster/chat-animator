@@ -172,7 +172,8 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     const messageHeight = message.getHeight(ctx,
                                             bubbleWidth,
                                             animationSettings);
-    roundedRect(ctx, xPos, startHeight, bubbleWidth, messageHeight, 16);
+    const borderRadius = Math.min(messageHeight / 2, 16);
+    roundedRect(ctx, xPos, startHeight, bubbleWidth, messageHeight, borderRadius);
     ctx.fillStyle = message.profile.textPicker.value;
     wrapTextAndDraw(ctx,
                     message.message,

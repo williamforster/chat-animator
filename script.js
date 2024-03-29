@@ -148,6 +148,9 @@ function setupTextEntry() {
     const textEntryDiv = document.getElementById("textFields");
     textEntryDiv.innerHTML = '';
     for (var i = 0; i < allChatMessages.length; i++) {
+        const chatMessageRowDiv = document.createElement('div');
+        chatMessageRowDiv.className = "messageRowDiv";
+        
         const chatMsg = allChatMessages[i];
         const selectInput = document.createElement('select');
         for (var profile of chatProfiles) {
@@ -169,7 +172,7 @@ function setupTextEntry() {
             }
             playAnimationFromStart();
         });
-        textEntryDiv.appendChild(selectInput);
+        chatMessageRowDiv.appendChild(selectInput);
         
         const textInput = document.createElement('input');
         textInput.type = 'text';
@@ -181,13 +184,14 @@ function setupTextEntry() {
             chatMsg.message = textInput.value;
             playAnimationFromStart();
         });
-        textEntryDiv.appendChild(textInput);
+        chatMessageRowDiv.appendChild(textInput);
         
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = "-";
         deleteButton.className = "deleteButton";
         if (i == 0) {
             deleteButton.disabled = true;
+            deleteButton.className = "firstButton";
         }
         allChatMessages[i].deleteButton = deleteButton;
         deleteButton.addEventListener('click', (e) => {
@@ -197,9 +201,9 @@ function setupTextEntry() {
             playAnimationFromStart();
             setupTextEntry();
         });
-        textEntryDiv.appendChild(deleteButton);
+        chatMessageRowDiv.appendChild(deleteButton);
         
-        textEntryDiv.appendChild(document.createElement('br'));
+        textEntryDiv.appendChild(chatMessageRowDiv);
     }
 }
 

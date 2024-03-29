@@ -21,7 +21,7 @@ export class Profile {
         this.image = otherProfile.image
         this.backColor = otherProfile.backColor;
         this.color = otherProfile.color;
-        this.isMainPerson = otherProfile.isMainPerson;
+        this.isMainPerson = false;
         this.alphaValue = otherProfile.alphaValue;
     }
     
@@ -129,6 +129,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         deleteButton.className = "deleteButton";
         if (profile === profiles[0]) {
             deleteButton.disabled = true;
+            deleteButton.className = "firstButton";
         }
         deleteButton.addEventListener('click', () => {
             deleteProfile(profileClosure);
