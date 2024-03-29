@@ -12,11 +12,20 @@ body {
     align-items: center;
 }
 
+@media screen and (max-width: 1024px) {
+    body {
+        flex-direction: column-reverse;
+    }
+}
+
 table {
     margin: 0 auto;
 }
 td:first-of-type {
     text-align: right;
+}
+td {
+    padding: 3px 6px;
 }
 
 .profilePic {
@@ -88,13 +97,6 @@ select {
     width: 40px;
 }
 
-/* Buttons */
-.newThing {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-}
-
 .horizontalCenter {
     display: flex;
     justify-content: center;
@@ -104,20 +106,53 @@ select {
     margin-top: -20px;
 }
 
+/* Buttons */
+button.newThing {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    font-size: 30px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.newThing img {
+    width: 30%;
+    height: 30%;
+}
+
 .deleteButton {
     width: 20px;
     height: 20px;
     border-radius: 10px;
+    font-size: 10px;
+    line-height: 10px;
 }
 
 .deleteButton, .newThing {
     color: white;
-    font-size: 10px;
     margin: 3px 9px;
     border: none;
+    background-color: #555;
+    text-align: center;
 }
 
 /** Hide the first delete button which is disabled */
 .firstButton {
-    display: none;
+    visibility: hidden;
+}
+
+input.picker {
+    width: 24px;
+    height: 24px;
+}
+
+canvas {
+    border: 1px solid #ddd;
+}
+
+.saveButton {
+    padding: 4px 8px;
 }

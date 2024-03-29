@@ -53,7 +53,7 @@
                         <label for="backColor">Canvas Color:</label>
                     </td>
                     <td>
-                        <input type="color" id="backColor" value="#ffffff"/>
+                        <input type="color" class="picker" id="backColor" value="#ffffff"/>
                         <input type="range" class="range" id="backAlpha" min="0.00" max="1.0" step="0.01" value="0.0"/>
                     </td>
                 </tr>
@@ -63,12 +63,12 @@
             </div>
             <br>
             <div class="horizontalCenter">
-                <button id="newProfile" class="newThing">+</button>
+                <button id="newProfile" class="newThing"><img src='./plus.svg' alt="a plus symbol"/></button>
             </div>
             <div id="textFields">
             </div>
             <div class="horizontalCenter">
-                <button id="newMessage" class="newThing">+</button>
+                <button id="newMessage" class="newThing"><img src='./plus.svg' alt="a plus symbol"/></button>
             </div>
         </div>
         
@@ -92,8 +92,8 @@
             </div>
             <br>
             <div id="saveButtons">
-                <button id="saveWebmButton">Save .webm</button>
-                <button id="saveMp4Button">Save .mp4</button>
+                <button id="saveWebmButton" class="saveButton">Save .webm</button>
+                <button id="saveMp4Button" class="saveButton">Save .mp4</button>
             </div>
             <br>
         </div>

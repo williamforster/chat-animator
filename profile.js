@@ -16,7 +16,7 @@ export class Profile {
     
     // Create a copy of another profile
     copy(otherProfile) {
-        this.profileName = otherProfile.profileName;
+        this.profileName = otherProfile.profileName + "2";
         this.imageLink = otherProfile.imageLink;
         this.image = otherProfile.image
         this.backColor = otherProfile.backColor;
@@ -59,6 +59,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
     // Empty the div element
     divElement.innerHTML = '';
     
+    const allProfilesClosure = profiles;
     // Iterate through the profiles array
     for (var profile of profiles) {
         const profileClosure = profile;
@@ -82,6 +83,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         const picker = document.createElement('input');
         picker.type = 'color';
         picker.value = profile.backColor;
+        picker.className = "picker";
         picker.addEventListener('input', () => {
             profileClosure.backColor = picker.value;
         });
@@ -104,6 +106,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         // Add a text color picker
         const textPicker = document.createElement('input');
         textPicker.type = 'color';
+        textPicker.className = "picker";
         textPicker.value = profile.color;
         profile.textPicker = textPicker;
         textPicker.addEventListener('input', () => {
@@ -117,6 +120,12 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         text.className = "nameInput";
         text.value = profile.profileName;
         text.addEventListener('change', (e) => {
+            // Prevent errors with collision of profile names
+            for (var prof of allProfilesClosure) {
+                if (text.value == prof.profileName) {
+                    text.value += '2';
+                }
+            }
             profileClosure.profileName = text.value;
             setupTextEntry();
         });
@@ -143,7 +152,8 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         const thisProfile = profile;
         // Add the profile image change functionality
         // When the image is clicked, trigger the file input
-        img.addEventListener('click', () => {
+        img.addEventListener('click', (e) => {
+            console.log("Clicked image upload");
             // Create a file input element dynamically
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
@@ -152,13 +162,15 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
             const closureProfile = thisProfile;
             // Handle file selection
             fileInput.addEventListener('change', (event) => {
+                console.log("Selected image file");
                 const file = event.target.files[0]; // Get the selected file
                 if (file) {
                     const reader = new FileReader(); // Create a FileReader to read the file
-                    reader.onload = function(e) {
+                    reader.onload = function(e2) {
                         //console.log("Updated profile image to:" + e.target.result);
                         closureProfile.setImageLink(reader.result); // Set the img src to the read file
                         img.src = reader.result;
+                        closureProfile.image = new Image();
                         closureProfile.image.src = reader.result;
                         
                     };
