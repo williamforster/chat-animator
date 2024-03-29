@@ -400,7 +400,16 @@ function drawPicture(ctx, message, bottomHeight, canvas, animationSettings) {
         const clipRadius = picSize / 2;
         
         
-        
+        // Draw image with shortest dimension matching the circle.
+        const aspectRatio = message.profile.image.width /
+                            message.profile.image.height;
+        var xSize = picSize;
+        var ySize = picSize;
+        if (aspectRatio > 1) {
+            xSize = picSize * aspectRatio;
+        } else {
+            ySize = picSize / aspectRatio;
+        }
         
         ctx.save();
         
@@ -410,10 +419,10 @@ function drawPicture(ctx, message, bottomHeight, canvas, animationSettings) {
         ctx.arc(clipX, clipY, clipRadius, 0, Math.PI * 2, true);
         ctx.clip();
         ctx.drawImage(message.profile.image,
-                      clipX - picSize / 2,
-                      clipY - picSize / 2,
-                      picSize,
-                      picSize);
+                      clipX - xSize / 2,
+                      clipY - ySize / 2,
+                      xSize,
+                      ySize);
         
         ctx.restore();
         

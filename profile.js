@@ -103,7 +103,7 @@ export function updateProfileDiv(divElement, profiles) {
         
         
     
-        
+        const thisProfile = profile;
         // Add the profile image change functionality
         // When the image is clicked, trigger the file input
         img.addEventListener('click', () => {
@@ -111,14 +111,17 @@ export function updateProfileDiv(divElement, profiles) {
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
             fileInput.accept = 'image/*'; // Accept only images
+            
+            const closureProfile = thisProfile;
             // Handle file selection
             fileInput.addEventListener('change', (event) => {
                 const file = event.target.files[0]; // Get the selected file
                 if (file) {
                     const reader = new FileReader(); // Create a FileReader to read the file
                     reader.onload = function(e) {
-                        profile.setImageLink(reader.result); // Set the img src to the read file
+                        closureProfile.setImageLink(reader.result); // Set the img src to the read file
                         img.src = reader.result;
+                        closureProfile.image.src = reader.result;
                         console.log("Updated profile image to:" + e.target.result);
                     };
                     reader.readAsDataURL(file); // Read the file as Data URL
