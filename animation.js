@@ -24,7 +24,7 @@ export class AnimationSettings {
     // How long the messages should spend sliding onto the screen
     durationMessageSlideUp = 0.5;
     // How long the messages should spend stationary
-    durationMessageHold = 0.5;
+    durationMessageHold = 1.0;
     chatBubbleWidthPercent = 0.65;
     chatBubbleSpacingPixels = 20;
     // Text inset as a fraction of the total chat bubble width

@@ -5,16 +5,17 @@ import {ChatMessage} from './chatMessage.js';
 // The image/name pairs that are displayed
 var chatProfiles = [];
 chatProfiles.push(new Profile('Grump', './char1.svg', '#218aff', true, '#ffffff'));
-chatProfiles.push(new Profile('Jane', './senior-transparent.svg', '#d8d8d8'));
+chatProfiles.push(new Profile('Olivia', './senior-transparent.svg', '#d8d8d8'));
 chatProfiles.push(new Profile('Chad', './char2.svg'));
 chatProfiles.push(new Profile('Tischman', './char3.svg'));
 
 // All chat messages, whether on screen yet or not
 var allChatMessages = [];
-allChatMessages.push(new ChatMessage("Hello world", chatProfiles[0]));
-allChatMessages.push(new ChatMessage("Hello world this is a longer message.", chatProfiles[1]));
-allChatMessages.push(new ChatMessage("Hello world 😃", chatProfiles[2]));
-allChatMessages.push(new ChatMessage("Hello world", chatProfiles[3]));
+allChatMessages.push(new ChatMessage("Have you heard about chat-animator?", chatProfiles[0]));
+allChatMessages.push(new ChatMessage("It makes phone chat animations like this.", chatProfiles[0]));
+allChatMessages.push(new ChatMessage("How cool 😃", chatProfiles[2]));
+allChatMessages.push(new ChatMessage("You can use them anywhere for free! Even the profile pictures are free for commercial use.", chatProfiles[3]));
+allChatMessages.push(new ChatMessage("Import the file into your video editor", chatProfiles[3]));
 
 var animationSettings = new AnimationSettings();
 
@@ -181,7 +182,7 @@ function setupTextEntry() {
         textInput.className = "messageInput";
         allChatMessages[i].textInput = textInput
         textInput.addEventListener('input', () => {
-            chatMsg.message = textInput.value;
+            chatMsg.message = textInput.value + ' ';
             playAnimationFromStart();
         });
         chatMessageRowDiv.appendChild(textInput);

@@ -139,6 +139,10 @@ button.newThing {
     text-align: center;
 }
 
+button::hover {
+    background-color: #777;
+}
+
 /** Hide the first delete button which is disabled */
 .firstButton {
     visibility: hidden;

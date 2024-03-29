@@ -164,14 +164,15 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
             fileInput.addEventListener('change', (event) => {
                 console.log("Selected image file");
                 const file = event.target.files[0]; // Get the selected file
+                const closureProfile2 = closureProfile;
                 if (file) {
                     const reader = new FileReader(); // Create a FileReader to read the file
                     reader.onload = function(e2) {
                         //console.log("Updated profile image to:" + e.target.result);
-                        closureProfile.setImageLink(reader.result); // Set the img src to the read file
+                        closureProfile2.setImageLink(reader.result); // Set the img src to the read file
                         img.src = reader.result;
-                        closureProfile.image = new Image();
-                        closureProfile.image.src = reader.result;
+                        closureProfile2.image = new Image();
+                        closureProfile2.image.src = reader.result;
                         
                     };
                     reader.readAsDataURL(file); // Read the file as Data URL
