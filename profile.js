@@ -154,33 +154,38 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         // When the image is clicked, trigger the file input
         img.addEventListener('click', (e) => {
             console.log("Clicked image upload");
-            // Create a file input element dynamically
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/*'; // Accept only images
             
-            const closureProfile = thisProfile;
-            // Handle file selection
-            fileInput.addEventListener('change', (event) => {
-                console.log("Selected image file");
-                const file = event.target.files[0]; // Get the selected file
-                const closureProfile2 = closureProfile;
-                if (file) {
-                    const reader = new FileReader(); // Create a FileReader to read the file
-                    reader.onload = function(e2) {
-                        //console.log("Updated profile image to:" + e.target.result);
-                        closureProfile2.setImageLink(reader.result); // Set the img src to the read file
-                        img.src = reader.result;
-                        closureProfile2.image = new Image();
-                        closureProfile2.image.src = reader.result;
-                        
-                    };
-                    reader.readAsDataURL(file); // Read the file as Data URL
-                } else {
-                    console.log("Error - invalid file selected for profile picture");
-                }
-            });
-            fileInput.click();
+            if (window.FileReader) {
+                // Create a file input element dynamically
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*'; // Accept only images
+                
+                const closureProfile = thisProfile;
+                // Handle file selection
+                fileInput.addEventListener('input', (event) => {
+                    console.log("Selected image file");
+                    const file = event.target.files[0]; // Get the selected file
+                    const closureProfile2 = closureProfile;
+                    if (file) {
+                        const reader = new FileReader(); // Create a FileReader to read the file
+                        reader.onload = function(e2) {
+                            //console.log("Updated profile image to:" + e.target.result);
+                            closureProfile2.setImageLink(reader.result); // Set the img src to the read file
+                            img.src = reader.result;
+                            closureProfile2.image = new Image();
+                            closureProfile2.image.src = reader.result;
+                            
+                        };
+                        reader.readAsDataURL(file); // Read the file as Data URL
+                    } else {
+                        console.log("Error - invalid file selected for profile picture");
+                    }
+                });
+                fileInput.click();
+            } else {
+                alert("Uploading photo not supported on your current device");
+            }
         });
     
     }

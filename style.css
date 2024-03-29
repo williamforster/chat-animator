@@ -9,7 +9,7 @@ body {
     background-color: #eee;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: top;
 }
 
 @media screen and (max-width: 1024px) {
@@ -46,7 +46,7 @@ td > .range:first-child {
 }
 
 #controlsDiv {
-    margin: 0 40px;
+    margin: 30px 40px;
 }
 
 #textFields {
@@ -139,7 +139,7 @@ button.newThing {
     text-align: center;
 }
 
-button::hover {
+.newThing:hover, .deleteButton:hover {
     background-color: #777;
 }
 
@@ -157,6 +157,15 @@ canvas {
     border: 1px solid #ddd;
 }
 
+#canvasParent {
+    display: flex;
+    justify-content: center;
+}
+
 .saveButton {
     padding: 4px 8px;
+}
+
+.recording {
+    color: red;
 }

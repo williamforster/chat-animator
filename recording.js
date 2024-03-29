@@ -12,11 +12,15 @@ let extension = "mp4";
 recordWebmButton.addEventListener("click", (clickEvent) => {
     mimeType = "video/webm;";
     extension = "webm";
+    recordWebmButton.innerHTML = 'Recording';
+    recordWebmButton.className += " recording";
     startRecording();
 });
 recordMp4Button.addEventListener("click", (clickEvent) => {
     mimeType = "video/mp4;";
     extension = "mp4";
+    recordMp4Button.innerHTML = 'Recording';
+    recordMp4Button.className += " recording";
     startRecording();
 });
 
@@ -24,6 +28,7 @@ function startRecording() {
     const canvas = document.querySelector("#animCanvas");
     if (!MediaRecorder.isTypeSupported(mimeType)) {
         alert("Video type not supported by user");
+        returnButtonsToNormal();
         return;
     }
     recording = true;
@@ -62,4 +67,17 @@ export function finishedRecording() {
         a.click();
         URL.revokeObjectURL(url);
     },5);
+    
+    returnButtonsToNormal();
+}
+
+/***
+ * When recording the buttons say 'recording'. After they should be
+ * returned to normal by this function.
+ */
+function returnButtonsToNormal() {
+    recordMp4Button.innerHTML = 'Save .mp4';
+    recordMp4Button.className = "saveButton";
+    recordWebmButton.innerHTML = 'Save .webm';
+    recordWebmButton.className = "saveButton";
 }
