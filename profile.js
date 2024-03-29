@@ -60,6 +60,9 @@ export function updateProfileDiv(divElement, profiles) {
         // Append the img to the profile div
         profileDiv.appendChild(img);
         
+        profile.image = new Image();
+        profile.image.src = profile.getImageLink();
+        
         
         // Add a message color picker
         const picker = document.createElement('input');

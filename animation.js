@@ -41,6 +41,8 @@ export class AnimationSettings {
     nameSizePercent = 0.10;
     
     backColor = "#ffffff00";
+    // nudge the profile pics away from the edge of screen
+    nudgeProfiles = 5;
 }
 
 // Set to -1 as a reset flag for chat messages. This happens in the drawFrame function
@@ -180,8 +182,10 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
                     animationSettings.lineHeight);
     
     // Draw name
-    const bottomHeight = startHeight + messageHeight;
+    const bottomHeight = startHeight + messageHeight + 10;
     drawName(ctx, message, bottomHeight, canvas, animationSettings);
+    
+    drawPicture(ctx, message, bottomHeight, canvas, animationSettings);
 }
 
 /**
@@ -362,9 +366,7 @@ function drawName(ctx, message, bottomHeight, canvas, animationSettings) {
     ctx.fillStyle = '#999999';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    
-    const nudge = 5;
-    
+    const nudge = animationSettings.nudgeProfiles;
     ctx.scale(0.5,0.5);
     if (animationSettings.showNames) {
         var centerX = (nameSizePixels / 2) + nudge;
@@ -374,4 +376,46 @@ function drawName(ctx, message, bottomHeight, canvas, animationSettings) {
         ctx.fillText(message.profile.profileName, centerX * 2, bottomHeight * 2);
     }
     ctx.scale(2,2);
+}
+
+/**
+ * Draw the profile picture next to the chat bubble
+ * @param ctx       the drawing context
+ * @param message   a ChatMessage object
+ * @param bottomHeight  the baseline of the message in pixels
+ * @param canvas        the canvas element
+ * @param animationSettings yep
+ */
+function drawPicture(ctx, message, bottomHeight, canvas, animationSettings) {
+    if (animationSettings.showNames) {
+        const nudge = animationSettings.nudgeProfiles;
+        const picSize = animationSettings.nameSizePercent * canvas.width;
+        var clipX = (picSize / 2) + nudge;
+        if (message.profile.isMainPerson) {
+            clipX = canvas.width - clipX;
+        }
+        
+        const fontSize = Number(ctx.font.replace('px','').split(' ')[0]) / 2;
+        const clipY = bottomHeight - (fontSize + 2) - (picSize / 2);
+        const clipRadius = picSize / 2;
+        
+        
+        
+        
+        ctx.save();
+        
+        
+        // Begin clip path
+        ctx.beginPath();
+        ctx.arc(clipX, clipY, clipRadius, 0, Math.PI * 2, true);
+        ctx.clip();
+        ctx.drawImage(message.profile.image,
+                      clipX - picSize / 2,
+                      clipY - picSize / 2,
+                      picSize,
+                      picSize);
+        
+        ctx.restore();
+        
+    }
 }
