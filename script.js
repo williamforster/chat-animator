@@ -219,6 +219,11 @@ function setupTextEntry() {
 function deleteProfile(profile) {
     if (chatProfiles.length > 1) {
         const index = chatProfiles.indexOf(profile);
+        for (var message of allChatMessages) {
+            if (message.profile == profile) {
+                message.profile = chatProfiles[0];
+            }
+        }
         chatProfiles.splice(index, 1);
         console.log(chatProfiles.length);
         updateProfileDiv(document.getElementById("profiles"),

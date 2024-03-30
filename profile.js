@@ -75,8 +75,8 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         // Append the img to the profile div
         profileDiv.appendChild(img);
         
-        profile.image = new Image();
-        profile.image.src = profile.getImageLink();
+        profileClosure.image = new Image();
+        profileClosure.image.src = profile.getImageLink();
         
         
         // Add a message color picker
@@ -88,7 +88,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
             profileClosure.backColor = picker.value;
         });
         profileDiv.appendChild(picker);
-        profile.picker = picker;
+        profileClosure.picker = picker;
         
         const alpha = document.createElement('input');
         alpha.type = 'range';
