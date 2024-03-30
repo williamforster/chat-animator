@@ -4,22 +4,32 @@
 }
 
 body {
-    width: 80vw;
+    background: #ffcd85;
+    padding: 0 40px;
+}
+
+#wrapper {
+    min-width: 80vw;
     margin: 20px auto;
-    background-color: #eee;
+    padding: 10px 20px;
+    background-color: #f5f7fb;
     display: flex;
     flex-direction: row;
     align-items: top;
+    color: #141122;
+    font-family: sans-serif;
+    box-shadow: 40px 28px 15px #00000030;
+    border-radius: 50px;
 }
 
-@media screen and (max-width: 1024px) {
-    body {
-        flex-direction: column-reverse;
-    }
+table, #profilesParentDiv, #textFieldsParent {
+    background: white;
+    border-radius: 40px;
+    padding: 10px 20px;
 }
 
 table {
-    margin: 0 auto;
+    margin: 0 0 0 auto;
 }
 td:first-of-type {
     text-align: right;
@@ -49,23 +59,29 @@ td > .range:first-child {
     margin: 30px 40px;
 }
 
-#textFields {
+#textFieldsParent {
     margin-top: 40px;
 }
 
-#profiles {
-    width: 330px;
-    margin: 40px auto 0 auto;
+#profilesParentDiv {
+    width: 360px;
+    margin: 40px 0 0 auto;
 }
 
 .profile {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: flex-end;
+}
+
+.profile > * {
+    margin: 0 6px;
 }
 
 .messageRowDiv {
-    width: 600px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 select {
@@ -80,30 +96,34 @@ select {
     width: 400px;
 }
 
+#font {
+    width: 100px;
+}
+
+.nameInput, .messageInput, .sizeInput, #font, select {
+    background-color: white;
+    color: #11111e;
+}
+
+select {
+    -webkit-appearance: none;
+    width: 86px;
+    text-align: center;
+    text-align-last: center;
+}
+
 #saveButtons {
     display: flex;
     justify-content: space-around;
 }
 
-#sizeControls {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0 0 0;
-}
-
 .sizeInput {
-    width: 40px;
+    width: 100px;
 }
 
 .horizontalCenter {
     display: flex;
     justify-content: center;
-}
-
-#newProfile {
-    margin-top: -20px;
 }
 
 /* Buttons */
@@ -113,6 +133,7 @@ button.newThing {
     border-radius: 20px;
     font-size: 30px;
     line-height: 30px;
+    margin-top: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,28 +145,29 @@ button.newThing {
 }
 
 .deleteButton {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
     font-size: 10px;
     line-height: 10px;
 }
 
 .deleteButton, .newThing {
-    color: white;
-    margin: 3px 9px;
+    color: #11111e;
+    margin: 0 0 0 9px;
     border: none;
-    background-color: #555;
+    background-color: #FFBE30;
     text-align: center;
 }
 
 .newThing:hover, .deleteButton:hover {
-    background-color: #777;
+    background-color: #cf9E00;
 }
 
 /** Hide the first delete button which is disabled */
 .firstButton {
     visibility: hidden;
+    margin: 0 16px 0 0;
 }
 
 input.picker {
@@ -154,7 +176,7 @@ input.picker {
 }
 
 canvas {
-    border: 1px solid #ddd;
+    border: 1px solid #333;
 }
 
 #canvasParent {
@@ -168,4 +190,51 @@ canvas {
 
 .recording {
     color: red;
+}
+
+/**
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track, input[type="range"]::-moz-range-track {
+    background: linear-gradient(0deg, #666 0%, #333 35%);
+    border-radius: 3px;
+    height: 6px;
+}
+
+input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: -6px;
+    background-color: #858585;
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
+    border: 1px solid #aaa;
+}*/
+
+@media screen and (max-width: 1024px) {
+    #wrapper {
+        flex-direction: column-reverse;
+    }
+    
+    table {
+        margin: 0 auto;
+    }
+    
+    #profilesParentDiv {
+        margin: 40px auto 0 auto;
+    }
+    
+    .profile {
+        justify-content: center;
+    }
+    
+    .messageRowDiv {
+        justify-content: center;
+    }
 }

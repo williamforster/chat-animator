@@ -68,6 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     canvasWidthInput.addEventListener('input', function() {
         setCanvasSize();
+        var widthParentDiv = document.getElementById("wrapper");
+        const controlsDiv = document.getElementById("controlsDiv");
+        var newWidth = Number(canvasWidthInput.value) + 100;
+        if (widthParentDiv.getBoundingClientRect().width > 1024) {
+            newWidth += Number(controlsDiv.getBoundingClientRect().width);
+        }
+        console.log(`setting minWidth=${newWidth}`);
+        widthParentDiv.style.minWidth = newWidth + 'px';
     });
     canvasHeightInput.addEventListener('input', function() {
         setCanvasSize();

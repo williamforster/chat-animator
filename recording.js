@@ -32,7 +32,7 @@ function startRecording() {
         return;
     }
     recording = true;
-    const stream = canvas.captureStream(24);
+    const stream = canvas.captureStream(60);
     var options = { mimeType: mimeType,
         type: 'video',
         width: canvas.width,

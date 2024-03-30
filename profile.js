@@ -107,8 +107,8 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         const textPicker = document.createElement('input');
         textPicker.type = 'color';
         textPicker.className = "picker";
-        textPicker.value = profile.color;
-        profile.textPicker = textPicker;
+        textPicker.value = profileClosure.color;
+        profileClosure.textPicker = textPicker;
         textPicker.addEventListener('input', () => {
             profileClosure.color = textPicker.value;
         });

@@ -40,7 +40,7 @@ export class AnimationSettings {
     showNames = true;
     nameSizePercent = 0.10;
     
-    backColor = "#ffffff00";
+    backColor = "#ffffffff";
     // nudge the profile pics away from the edge of screen
     nudgeProfiles = 5;
 }
@@ -426,6 +426,7 @@ function drawPicture(ctx, message, bottomHeight, canvas, animationSettings) {
                       ySize);
         
         ctx.restore();
-        
+        // The last element's alpha channel doesn't work without this hacky line ???
+        ctx.beginPath();
     }
 }

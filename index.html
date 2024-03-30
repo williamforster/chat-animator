@@ -2,10 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-            <title>Custom Canvas & Text Fields</title>
+            <title>Chat-Animator</title>
             <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div id="wrapper">
         <div id="controlsDiv">
             <table>
                 <tr>
@@ -34,14 +35,6 @@
                 </tr>
                 <tr>
                     <td>
-                        <label for="showNames">Show Names:</label>
-                    </td>
-                    <td>
-                        <input type="checkbox" checked=true id="showNames"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
                         <label for="font">Css style font:</label>
                     </td>
                     <td>
@@ -50,41 +43,55 @@
                 </tr>
                 <tr>
                     <td>
+                        <label for="canvasWidth">Canvas Width:</label>
+                    </td>
+                    <td>
+                        <input type="number" class="sizeInput" id="canvasWidth" value="360"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="canvasHeight">Canvas Height:</label>
+                    </td>
+                    <td>
+                        <input type="number" class="sizeInput" id="canvasHeight" value="600"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <label for="backColor">Canvas Color:</label>
                     </td>
                     <td>
                         <input type="color" class="picker" id="backColor" value="#ffffff"/>
-                        <input type="range" class="range" id="backAlpha" min="0.00" max="1.0" step="0.01" value="0.0"/>
+                        <input type="range" class="range" id="backAlpha" min="0.00" max="1.0" step="0.01" value="1.0"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="showNames">Show Names:</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" checked=true id="showNames"/>
                     </td>
                 </tr>
             </table>
-            
-            <div id="profiles">
+            <div id="profilesParentDiv">
+                <div id="profiles">
+                </div>
+                <div class="horizontalCenter">
+                    <button id="newProfile" class="newThing"><img src='./plus.svg' alt="a plus symbol"/></button>
+                </div>
             </div>
-            <br>
-            <div class="horizontalCenter">
-                <button id="newProfile" class="newThing"><img src='./plus.svg' alt="a plus symbol"/></button>
-            </div>
-            <div id="textFields">
-            </div>
-            <div class="horizontalCenter">
-                <button id="newMessage" class="newThing"><img src='./plus.svg' alt="a plus symbol"/></button>
+            <div id="textFieldsParent">
+                <div id="textFields">
+                </div>
+                <div class="horizontalCenter">
+                    <button id="newMessage" class="newThing"><img src='./plus.svg' alt="a plus symbol"/></button>
+                </div>
             </div>
         </div>
         
         <div>
-            <div>
-                <div id="sizeControls">
-                    <div>
-                        <label for="canvasWidth">Canvas Width:</label>
-                        <input type="number" class="sizeInput" id="canvasWidth" value="360"/> <!-- Default value -->
-                    </div>
-                    <div>
-                        <label for="canvasHeight">Canvas Height:</label>
-                        <input type="number" class="sizeInput" id="canvasHeight" value="600"/> <!-- Default value 1278 -->
-                    </div>
-                </div>
-            </div>
             <div id="canvasParent">
                 <canvas id="animCanvas">
                     Your browser does not support the canvas element.
@@ -99,6 +106,7 @@
         </div>
         
         <script type="module" src="script.js"></script>
+        </div>
     </body>
 </html>
 
