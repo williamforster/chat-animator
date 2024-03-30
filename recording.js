@@ -10,14 +10,14 @@ let mimeType = "video/mp4;";
 let extension = "mp4";
 
 recordWebmButton.addEventListener("click", (clickEvent) => {
-    mimeType = "video/webm;";
+    mimeType = bestWebmCodec;
     extension = "webm";
     recordWebmButton.innerHTML = 'Recording';
     recordWebmButton.className += " recording";
     startRecording();
 });
 recordMp4Button.addEventListener("click", (clickEvent) => {
-    mimeType = "video/mp4;";
+    mimeType = bestMp4Codec;
     extension = "mp4";
     recordMp4Button.innerHTML = 'Recording';
     recordMp4Button.className += " recording";
@@ -32,11 +32,11 @@ function startRecording() {
         return;
     }
     recording = true;
-    const stream = canvas.captureStream(25);
+    const stream = canvas.captureStream(24);
     var options = { mimeType: mimeType,
         type: 'video',
-        width: 200,
-        height: 700
+        width: canvas.width,
+        height: canvas.height
     };
     mediaRecorder = new MediaRecorder(stream, options);
     recordedChunks = [];
@@ -46,6 +46,17 @@ function startRecording() {
         }
     };
     mediaRecorder.start();
+    mediaRecorder.onstop = (e) => {
+        const blob = new Blob(recordedChunks, {
+        type: mimeType
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "recording." + extension;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
     playAnimationFromStart();
 }
 
@@ -56,17 +67,9 @@ function startRecording() {
 export function finishedRecording() {
     mediaRecorder.stop();
     recording = false;
-    setTimeout(() => {
-        const blob = new Blob(recordedChunks, {
-        type: mimeType
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "recording." + extension;
-        a.click();
-        URL.revokeObjectURL(url);
-    },5);
+    //setTimeout(() => {
+    //},500);
+    // The example has
     
     returnButtonsToNormal();
 }
@@ -81,3 +84,28 @@ function returnButtonsToNormal() {
     recordWebmButton.innerHTML = 'Save .webm';
     recordWebmButton.className = "saveButton";
 }
+
+function getSupportedCodec(media, types, codecs) {
+    const isSupported = MediaRecorder.isTypeSupported;
+    const supportedArray = [];
+    types.forEach((type) => {
+        const mimeType = `${media}/${type}`;
+        codecs.forEach((codec) => [
+            `${mimeType};codecs=${codec}`,
+            `${mimeType};codecs=${codec.toUpperCase()}`,
+        ].forEach(variation => {
+            if(isSupported(variation))
+                supportedArray.push(variation);
+        }));
+        //if (isSupported(mimeType))
+        //    supportedArray.push(mimeType);
+    });
+    return supportedArray;
+}
+
+const videoTypes = ["webm", "ogg", "mp4", "x-matroska"];
+const audioTypes = ["webm", "ogg", "mp3", "x-matroska"];
+const codecs = ["vp9", "vp9.0", "vp8", "vp8.0", "avc1", "av1", "h265", "h.265", "h264", "h.264", "opus", "pcm", "aac", "mpeg", "mp4a"];
+
+const bestMp4Codec = getSupportedCodec("video", ["mp4"], codecs)[0];
+const bestWebmCodec = getSupportedCodec("video", ["webm"], codecs)[0];
