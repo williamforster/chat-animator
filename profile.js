@@ -126,7 +126,9 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
                     text.value += '2';
                 }
             }
-            profileClosure.profileName = text.value;
+            if (text.value) {
+                profileClosure.profileName = text.value;
+            }
             setupTextEntry();
         });
         profileDiv.appendChild(text);

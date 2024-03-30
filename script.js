@@ -13,7 +13,7 @@ chatProfiles.push(new Profile('Tischman', './char3.svg'));
 var allChatMessages = [];
 allChatMessages.push(new ChatMessage("Have you heard about chat-animator?", chatProfiles[0]));
 allChatMessages.push(new ChatMessage("It makes phone chat animations like this.", chatProfiles[0]));
-allChatMessages.push(new ChatMessage("How cool 😃", chatProfiles[2]));
+allChatMessages.push(new ChatMessage("How cool 😃 ", chatProfiles[2]));
 allChatMessages.push(new ChatMessage("You can use them anywhere for free! Even the profile pictures are free for commercial use.", chatProfiles[3]));
 allChatMessages.push(new ChatMessage("Import the file into your video editor", chatProfiles[3]));
 
