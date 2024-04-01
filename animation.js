@@ -34,8 +34,8 @@ export class AnimationSettings {
     // Delay at the start (and end) of animation
     startDelay = 1.0;
     // pixels between vertical lines of text
-    lineHeight = 20;
-    font = "16px sans-serif";
+    lineHeight = 36;
+    font = "32px sans-serif";
     // Show names beside messages or do not show names
     showNames = true;
     nameSizePercent = 0.10;

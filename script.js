@@ -44,6 +44,11 @@ function setCanvasSize() {
     } else {
         console.log("Invalid value for canvas size");
     }
+    
+    // Now style the page so it fits
+    const parentDiv = document.getElementById("canvasParent");
+    parentDiv.style.width = (Number(newWidth) / 2) + 'px';
+    parentDiv.style.height = (Number(newHeight) / 2) + 'px';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -67,16 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     canvasWidthInput.addEventListener('change', function() {
         setCanvasSize();
-        
-        // Do the styling of the changed page
-        var widthParentDiv = document.getElementById("wrapper");
-        const controlsDiv = document.getElementById("controlsDiv");
-        var newWidth = Number(canvasWidthInput.value) + 100;
-        if (widthParentDiv.getBoundingClientRect().width > 1024) {
-            newWidth += Number(controlsDiv.getBoundingClientRect().width);
-        }
-        console.log(`setting minWidth=${newWidth}`);
-        widthParentDiv.style.minWidth = newWidth + 'px';
     });
     canvasHeightInput.addEventListener('change', function() {
         setCanvasSize();

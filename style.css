@@ -9,9 +9,9 @@ body {
 }
 
 #wrapper {
-    min-width: 80vw;
+    width: min-content;
     margin: 20px auto;
-    padding: 10px 20px;
+    padding: 10px 40px;
     background-color: #f5f7fb;
     display: flex;
     flex-direction: row;
@@ -178,7 +178,9 @@ input.picker {
 #canvasParent {
     display: flex;
     justify-content: center;
-    margin: 30px 0;
+    margin: 30px auto;
+    width: 290px;
+    height: 640px;
 }
 
 .saveButton {
