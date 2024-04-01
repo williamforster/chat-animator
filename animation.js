@@ -43,6 +43,22 @@ export class AnimationSettings {
     backColor = "#ffffffff";
     // nudge the profile pics away from the edge of screen
     nudgeProfiles = 5;
+    
+    /**
+     * Get the width of the text bubble rectangle given the canvas width
+     */
+    getBubbleWidth(canvas) {
+        return Math.floor(this.chatBubbleWidthPercent * canvas.width);
+    }
+    
+    /**
+     * Get the width of the text drawing area given the canvas width
+     */
+    getTextWidth(canvas) {
+        const bubbleWidth = this.getBubbleWidth(canvas);
+        const textInset = bubbleWidth * this.textInsetWidth;
+        return Math.floor(bubbleWidth - 2 * textInset);
+    }
 }
 
 // Set to -1 as a reset flag for chat messages. This happens in the drawFrame function
@@ -142,10 +158,10 @@ function roundedRect(ctx, x, y, width, height, radius) {
  * @return      the height of the text bubble in pixels
  */
 function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
-    var bubbleWidth = Math.floor(animationSettings.chatBubbleWidthPercent * canvas.width);
-    const textInsetWidth = bubbleWidth * animationSettings.textInsetWidth;
+    var bubbleWidth = animationSettings.getBubbleWidth(canvas);
     const textInsetHeight = bubbleWidth * animationSettings.textInsetHeight;
-    const textWidth = bubbleWidth - 2 * textInsetWidth;
+    const textWidth = animationSettings.getTextWidth(canvas);
+    const textInsetWidth = bubbleWidth * animationSettings.textInsetWidth;
     
     const startHeight = Math.floor(y * canvas.height);
     ctx.fillStyle = '#d8d8d8';
@@ -170,7 +186,7 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     ctx.font = animationSettings.font;
     ctx.textBaseline = 'top';
     let { widthRequired, messageHeight } = message.getSize(ctx,
-                                            bubbleWidth,
+                                            canvas,
                                             animationSettings);
     const borderRadius = Math.min(messageHeight / 2, 16);
     if (!left) {
@@ -242,10 +258,10 @@ function getOnScreenMessagesSize(ctx, chatMessages, canvas, animationSettings) {
         console.log("Error in animation.js: getOnScreenMessagesSize");
         return 20;
     }
-    const bubbleWidth = canvas.width * animationSettings.chatBubbleWidthPercent;
+    const textWidth = animationSettings.getTextWidth(canvas);
     for (var i = 0; i <= currentMessageIndex; i++) {
         let { widthRequired, messageHeight }  = chatMessages[i].getSize(ctx,
-                                                  bubbleWidth,
+                                                  canvas,
                                                   animationSettings);
         totalSize += messageHeight;
     }
@@ -261,7 +277,8 @@ function getOnScreenMessagesSize(ctx, chatMessages, canvas, animationSettings) {
  * @param canvas        the canvas (for width and height)
  */
 function layout(ctx, chatMessages, elapsedTime, canvas, animationSettings) {
-    const bubbleWidth = animationSettings.chatBubbleWidthPercent * canvas.width;
+    const bubbleWidth = animationSettings.getBubbleWidth(canvas);
+    const textWidth = animationSettings.getTextWidth(canvas);
     // Get the height of on-screen chat messages
     const onScreenHeightPixels = getOnScreenMessagesSize(ctx, chatMessages, canvas, animationSettings);
     //console.log(`Total messages height ${onScreenHeightPixels}`);
@@ -275,7 +292,7 @@ function layout(ctx, chatMessages, elapsedTime, canvas, animationSettings) {
     }
     for (var i = currentMessageIndex; i >= 0; i--) {
         let { widthRequired, messageHeight }  = chatMessages[i].getSize(ctx,
-                                                    bubbleWidth,
+                                                    canvas,
                                                     animationSettings);
         const thisBubbleHeight = messageHeight / canvas.height;
         chatMessages[i].desiredPosition = baseHeight - thisBubbleHeight

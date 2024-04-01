@@ -5,7 +5,7 @@
 
 body {
     background: #ffcd85;
-    padding: 0 40px;
+    padding: 0 40px 80px 40px;
 }
 
 #wrapper {
@@ -153,7 +153,7 @@ button.newThing {
 }
 
 .deleteButton, .newThing {
-    color: #11111e;
+    color: white;
     margin: 0 0 0 9px;
     border: none;
     background-color: #FFBE30;
@@ -175,13 +175,10 @@ input.picker {
     height: 24px;
 }
 
-canvas {
-    border: 1px solid #333;
-}
-
 #canvasParent {
     display: flex;
     justify-content: center;
+    margin: 30px 0;
 }
 
 .saveButton {

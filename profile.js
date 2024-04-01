@@ -54,12 +54,16 @@ export class Profile {
  *                       text entry section when profiles are changed
  * @param deleteProfile  A function that deletes given profile from global
                         array of profiles.
+ * @param fileInput     Having trouble with the fileInput disappearing
+                        from the DOM?
+                        so now it is in the main script file
  */
-export function updateProfileDiv(divElement, profiles, setupTextEntry, deleteProfile) {
+export function updateProfileDiv(divElement, profiles, setupTextEntry, deleteProfile, fileInput) {
     // Empty the div element
     divElement.innerHTML = '';
     
     const allProfilesClosure = profiles;
+    const fileInputClosure = fileInput;
     // Iterate through the profiles array
     for (var profile of profiles) {
         const profileClosure = profile;
@@ -159,7 +163,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
             
             if (window.FileReader) {
                 // Create a file input element dynamically
-                const fileInput = document.createElement('input');
+                fileInput = document.createElement('input');
                 fileInput.type = 'file';
                 fileInput.accept = 'image/*'; // Accept only images
                 

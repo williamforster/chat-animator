@@ -27,16 +27,18 @@ export class ChatMessage {
      * Get the height of this message in pixels given the
      * width of the message bubbles.
      * @param ctx           the drawing context
-     * @param bubbleWidth    max drawing width
+     * @param canvas        the drawing canvas
      * @param animationSettings the settings to calculate layout
      * @return the required width for the text, and the height
      */
-    getSize(ctx, bubbleWidth, animationSettings) {
+    getSize(ctx, canvas, animationSettings) {
         var words = this.message.split(' ');
         var line = '';
         var y = 0;
+        
+        const bubbleWidth = animationSettings.getBubbleWidth(canvas);
         const widthInset = bubbleWidth * animationSettings.textInsetWidth;
-        const maxWidth = bubbleWidth - (2 * widthInset);
+        const maxWidth = animationSettings.getTextWidth(canvas);
         const heightInset = bubbleWidth * animationSettings.textInsetHeight;
         var widthRequired = 0;
         for(var n = 0; n < words.length; n++) {
@@ -60,9 +62,14 @@ export class ChatMessage {
                 line = testLine;
             }
         }
+        var lastWidth = ctx.measureText(line).width;
+        if (lastWidth) {
+            widthRequired = Math.max(widthRequired, lastWidth);
+        }
         widthRequired += 2 * widthInset;
         widthRequired = Math.floor(widthRequired);
         const messageHeight = y + animationSettings.lineHeight + (2 * heightInset);
+        console.log(`textwidth: ${maxWidth}, maxWidth: ${maxWidth}, req:${widthRequired}`);
         return { widthRequired, messageHeight };
     }
 }

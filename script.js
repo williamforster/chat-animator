@@ -18,11 +18,32 @@ allChatMessages.push(new ChatMessage("You can use them anywhere for free! Even t
 allChatMessages.push(new ChatMessage("Import the file into your video editor", chatProfiles[3]));
 
 var animationSettings = new AnimationSettings();
+var fileInput;
 
 // Some glue to get the chatmessage variable into the animation module
 function drawFrameParent() {
     drawFrame(allChatMessages, animationSettings);
     window.requestAnimationFrame(drawFrameParent);
+}
+
+function setCanvasSize() {
+    const canvasWidthInput = document.getElementById('canvasWidth');
+    const canvasHeightInput = document.getElementById('canvasHeight');
+    // Get the current value of the input field
+    const newWidth = canvasWidthInput.value;
+    const newHeight = canvasHeightInput.value;
+    // Check if the input is a positive number
+    if (newWidth > 0 && newHeight > 0) {
+        var existingCanvas = document.getElementById('animCanvas');
+        
+        if (existingCanvas) {
+            existingCanvas.width = newWidth;
+            existingCanvas.height = newHeight;
+            playAnimationFromStart();
+        }
+    } else {
+        console.log("Invalid value for canvas size");
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -44,30 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const newProfileButton = document.getElementById('newProfile');
     const newMessageButton = document.getElementById('newMessage');
     
-    function setCanvasSize() {
-        // Get the current value of the input field
-        const newWidth = canvasWidthInput.value;
-        const newHeight = canvasHeightInput.value;
-        // Check if the input is a positive number
-        if (newWidth > 0 && newHeight > 0) {
-            var existingCanvas = document.getElementById('animCanvas');
-            
-            if (existingCanvas) {
-                // Get the parent element of the canvas
-                var parentElement = existingCanvas.parentNode;
-                
-                // Remove the existing canvas from the DOM
-                parentElement.removeChild(existingCanvas);
-                
-                parentElement.innerHTML = '<canvas id="animCanvas" width="' + newWidth + '" height="' + newHeight+ '"></canvas>';
-            }
-        } else {
-            console.log("Invalid value for canvas size");
-        }
-    }
-    
-    canvasWidthInput.addEventListener('input', function() {
+    canvasWidthInput.addEventListener('change', function() {
         setCanvasSize();
+        
+        // Do the styling of the changed page
         var widthParentDiv = document.getElementById("wrapper");
         const controlsDiv = document.getElementById("controlsDiv");
         var newWidth = Number(canvasWidthInput.value) + 100;
@@ -77,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`setting minWidth=${newWidth}`);
         widthParentDiv.style.minWidth = newWidth + 'px';
     });
-    canvasHeightInput.addEventListener('input', function() {
+    canvasHeightInput.addEventListener('change', function() {
         setCanvasSize();
     });
     animationDurationInput.value = animationSettings.durationMessageSlideUp;
@@ -129,7 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateProfileDiv(document.getElementById("profiles"), 
                          chatProfiles,
                          setupTextEntry,
-                         deleteProfile);
+                         deleteProfile,
+                         fileInput);
         setupTextEntry();
     });
     newMessageButton.addEventListener('click', () => {
@@ -145,7 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProfileDiv(document.getElementById("profiles"), 
                      chatProfiles,
                      setupTextEntry,
-                     deleteProfile);
+                     deleteProfile,
+                     fileInput);
     setupTextEntry();
     window.requestAnimationFrame(drawFrameParent);
 });
@@ -229,7 +232,8 @@ function deleteProfile(profile) {
         updateProfileDiv(document.getElementById("profiles"),
                          chatProfiles,
                          setupTextEntry,
-                         deleteProfile);
+                         deleteProfile,
+                         fileInput);
         setupTextEntry();
     }
 }
