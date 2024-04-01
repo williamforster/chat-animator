@@ -424,8 +424,15 @@ function drawPicture(ctx, message, bottomHeight, canvas, animationSettings) {
         
         
         // Draw image with shortest dimension matching the circle.
-        const aspectRatio = message.profile.image.width /
+        var aspectRatio = message.profile.image.width /
                             message.profile.image.height;
+        // svg magic. If svg file width or height is relative (eg 100%)
+        // firefox will complain. Workaround below.
+        if (!message.profile.image.width || !message.profile.image.height) {
+            aspectRatio = 1.0;
+            message.profile.image.width = 64;
+            message.profile.image.height = 64;
+        }
         var xSize = picSize;
         var ySize = picSize;
         if (aspectRatio > 1) {
