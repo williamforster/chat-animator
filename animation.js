@@ -38,7 +38,7 @@ export class AnimationSettings {
     font = "32px sans-serif";
     // Show names beside messages or do not show names
     showNames = true;
-    nameSizePercent = 0.10;
+    nameSizePercent = 0.12;
     
     backColor = "#ffffffff";
     // nudge the profile pics away from the edge of screen
@@ -148,6 +148,55 @@ function roundedRect(ctx, x, y, width, height, radius) {
 }
 
 /**
+ * Draw a rounded rectangle with the current stroke and fill, and a little tail
+ * pointing to the person who sent the text.
+ */
+function roundedRectWithTail(ctx, x, y, width, height, radius, left = true) {
+    // The bottom left border radius center
+    var borderRadiusCenter = {x: x + radius,y: y + height - radius};
+    const miniArcAngle = Math.PI / 5;
+    var destPos = {x: borderRadiusCenter.x - radius* Math.sin(miniArcAngle), y: borderRadiusCenter.y + radius * Math.cos(miniArcAngle)};
+    
+    if (left) {
+        ctx.beginPath();
+        // start at the top left
+        ctx.moveTo(x, y + radius);
+        // move down, then arc around the bottom left
+        ctx.arcTo(x, y + height, x - radius /2, y + height, radius / 2);
+        ctx.lineTo(x - radius / 2, y + height);
+        ctx.arcTo(x, y + height, destPos.x, destPos.y, radius);
+        
+        // Draw an arc where the corner radius normally is
+        ctx.arc(x + radius, y + height - radius, radius, (Math.PI / 2) + miniArcAngle, Math.PI / 2, true);
+        ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+        ctx.arcTo(x + width, y, x + width - radius, y, radius);
+        ctx.arcTo(x, y, x, y + radius, radius);
+        ctx.stroke();
+        ctx.fill();
+    } else {
+        borderRadiusCenter = {x: x + width - radius, y: y + height - radius};
+        destPos = {x:borderRadiusCenter.x + radius * Math.sin(miniArcAngle), y: borderRadiusCenter.y + radius * Math.cos(miniArcAngle)};
+            
+        ctx.beginPath();
+        // start at the top right below the radius
+        ctx.moveTo(x + width, y + radius);
+        // move down, and do the little tail on the right
+        ctx.arcTo(x + width, y + height, x + width + radius / 2, y + height, radius / 2);
+        ctx.lineTo(x + width + radius / 2, y + height);
+        ctx.arcTo(x + width, y + height, destPos.x, destPos.y, radius);
+            
+        // Draw an arc where the corner radius normally is
+        ctx.arc(borderRadiusCenter.x, borderRadiusCenter.y, radius,(Math.PI / 2) - miniArcAngle, Math.PI / 2);
+        // Do the bottom left radius.
+        ctx.arcTo(x, y + height, x, y + height - radius, radius);
+        ctx.arcTo(x, y, x + radius, y, radius);
+        ctx.arcTo(x + width, y, x + width, y + radius, radius);
+        ctx.stroke();
+        ctx.fill();
+    }
+}
+
+/**
  * Draw a text bubble at a given y position (top of the bubble)
  * @param ctx   the drawing context
  * @param message  the ChatMessage item
@@ -188,11 +237,11 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     let { widthRequired, messageHeight } = message.getSize(ctx,
                                             canvas,
                                             animationSettings);
-    const borderRadius = Math.min(messageHeight / 2, 16);
+    const borderRadius = Math.min(messageHeight / 2, animationSettings.lineHeight / 2);
     if (!left) {
         xPos += (bubbleWidth - widthRequired);
     }
-    roundedRect(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius);
+    roundedRectWithTail(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius, left);
     ctx.fillStyle = message.profile.textPicker.value;
     wrapTextAndDraw(ctx,
                     message.message,
