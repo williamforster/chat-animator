@@ -154,8 +154,9 @@ function roundedRect(ctx, x, y, width, height, radius) {
 function roundedRectWithTail(ctx, x, y, width, height, radius, left = true) {
     // The bottom left border radius center
     var borderRadiusCenter = {x: x + radius,y: y + height - radius};
+    // Stuff to do with meeting the border radius where it would usually be
     const miniArcAngle = Math.PI / 5;
-    var destPos = {x: borderRadiusCenter.x - radius* Math.sin(miniArcAngle), y: borderRadiusCenter.y + radius * Math.cos(miniArcAngle)};
+    var destPos = {x: borderRadiusCenter.x - radius * Math.sin(miniArcAngle), y: borderRadiusCenter.y + radius * Math.cos(miniArcAngle)};
     
     if (left) {
         ctx.beginPath();
@@ -211,8 +212,9 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     const textInsetHeight = bubbleWidth * animationSettings.textInsetHeight;
     const textWidth = animationSettings.getTextWidth(canvas);
     const textInsetWidth = bubbleWidth * animationSettings.textInsetWidth;
+    const yOffsetFromNames = animationSettings.nameSizePercent * 0.5 * canvas.width;
     
-    const startHeight = Math.floor(y * canvas.height);
+    const startHeight = Math.floor(y * canvas.height) - yOffsetFromNames;
     ctx.fillStyle = '#d8d8d8';
     if (message.profile.picker && message.profile.alpha) {
         const color = addAlpha(message.profile.picker.value, message.profile.alpha.value);
@@ -251,7 +253,7 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
                     animationSettings.lineHeight);
     
     // Draw name
-    const bottomHeight = startHeight + messageHeight + 10;
+    const bottomHeight = startHeight + messageHeight + yOffsetFromNames;
     drawName(ctx, message, bottomHeight, canvas, animationSettings);
     
     drawPicture(ctx, message, bottomHeight, canvas, animationSettings);
@@ -314,6 +316,7 @@ function getOnScreenMessagesSize(ctx, chatMessages, canvas, animationSettings) {
                                                   animationSettings);
         totalSize += messageHeight;
     }
+    totalSize += animationSettings.nameSizePercent * canvas.width;
     return totalSize + animationSettings.chatBubbleSpacingPixels *
             currentMessageIndex;
 }
