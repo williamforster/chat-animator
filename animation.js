@@ -239,7 +239,7 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     let { widthRequired, messageHeight } = message.getSize(ctx,
                                             canvas,
                                             animationSettings);
-    const borderRadius = Math.min(messageHeight / 2, animationSettings.lineHeight / 2);
+    const borderRadius = Math.min(messageHeight / 2, animationSettings.lineHeight);
     if (!left) {
         xPos += (bubbleWidth - widthRequired);
     }

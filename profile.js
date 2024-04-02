@@ -71,16 +71,24 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         const profileDiv = document.createElement('div');
         profileDiv.className = 'profile';
         
+        const imageDiv = document.createElement('div');
+        imageDiv.className = "profileImageParent";
+        profileDiv.appendChild(imageDiv);
+        
         // Create an img element for the profile image
         const img = document.createElement('img');
         img.src = profile.getImageLink();
         img.alt = profile.getProfileName();
         img.className = "profilePic";
         // Append the img to the profile div
-        profileDiv.appendChild(img);
-        
+        imageDiv.appendChild(img);
         profileClosure.image = new Image();
         profileClosure.image.src = profile.getImageLink();
+        
+        const uploadIcon = document.createElement('img');
+        uploadIcon.className = "uploadIcon";
+        uploadIcon.src = './cloud.svg';
+        imageDiv.appendChild(uploadIcon);
         
         
         // Add a message color picker
@@ -158,7 +166,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         const thisProfile = profile;
         // Add the profile image change functionality
         // When the image is clicked, trigger the file input
-        img.addEventListener('click', (e) => {
+        imageDiv.addEventListener('click', (e) => {
             console.log("Clicked image upload");
             
             if (window.FileReader) {

@@ -38,13 +38,6 @@ td {
     padding: 3px 6px;
 }
 
-.profilePic {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
 /* All sliders */
 .range {
     width: 50px;
@@ -68,6 +61,7 @@ td > .range:first-child {
     margin: 40px 0 0 auto;
 }
 
+/* Class of a profile flex div */
 .profile {
     display: flex;
     flex-direction: row;
@@ -77,6 +71,27 @@ td > .range:first-child {
 
 .profile > * {
     margin: 0 6px;
+}
+
+.profileImageParent {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.profilePic {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.uploadIcon {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
 }
 
 .messageRowDiv {
