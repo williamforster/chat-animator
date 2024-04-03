@@ -9,9 +9,11 @@ body {
 }
 
 #wrapper {
-    width: min-content;
-    margin: 20px auto;
     padding: 10px 40px;
+    width: min-content;
+}
+.wrapper {
+    margin: 20px auto;
     background-color: #f5f7fb;
     display: flex;
     flex-direction: row;
@@ -222,6 +224,16 @@ input.picker {
     color: red;
 }
 
+#wrapper2 {
+    width: 80vw;
+    overflow: hidden;
+}
+
+video {
+    margin: auto;
+    width: 85vw;
+}
+
 /**
 input[type="range"] {
     -webkit-appearance: none;
@@ -246,6 +258,7 @@ input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb
     border-radius: 8px;
     border: 1px solid #aaa;
 }*/
+
 
 @media screen and (max-width: 1024px) {
     #wrapper {
