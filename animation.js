@@ -38,6 +38,7 @@ export class AnimationSettings {
     font = "32px sans-serif";
     // Show names beside messages or do not show names
     showNames = true;
+    showTails = true;
     nameSizePercent = 0.12;
     
     backColor = "#ffffffff";
@@ -243,7 +244,11 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     if (!left) {
         xPos += (bubbleWidth - widthRequired);
     }
-    roundedRectWithTail(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius, left);
+    if (animationSettings.showTails) {
+        roundedRectWithTail(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius, left);
+    } else {
+        roundedRect(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius);
+    }
     ctx.fillStyle = message.profile.textPicker.value;
     wrapTextAndDraw(ctx,
                     message.message,

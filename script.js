@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startDelayInput = document.getElementById('startDelay');
     const fontInput = document.getElementById('font');
     const showNamesInput = document.getElementById('showNames');
+    const showTailsInput = document.getElementById('showTails');
     const backColorInput = document.getElementById('backColor');
     const backAlphaInput = document.getElementById('backAlpha');
     const newProfileButton = document.getElementById('newProfile');
@@ -107,6 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
     showNamesInput.addEventListener('input', () => {
         animationSettings.showNames = showNamesInput.checked;
     });
+    showTailsInput.addEventListener('input', () => {
+        animationSettings.showTails = showTailsInput.checked;
+    });
+
     function updateBackcolor() {
         animationSettings.backColor = addAlpha(backColorInput.value,
                                                backAlphaInput.value);
