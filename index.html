@@ -7,7 +7,7 @@
             <link rel="icon" type="image/x-icon" href="./favicon.ico">
     </head>
     <body>
-        <div id="wrapper">
+        <div id="wrapper" class="wrapper">
         <div id="controlsDiv">
             <table>
                 <tr>
@@ -134,6 +134,15 @@
         <script src="./gif.js"></script>
         <script src="./gif.worker.js"></script>
         <script type="module" src="script.js"></script>
+        </div>
+        <div id="wrapper2" class="wrapper">
+            <video id="video" autoplay="true" loop muted>
+                <source src="./Amorn-mimi-pixabay-overlay.mp4"/>
+                Your browser does not support video elements.
+            </video>
+            <script>
+                document.getElementById('video').play();
+            </script>
         </div>
     </body>
 </html>
