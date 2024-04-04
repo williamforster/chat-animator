@@ -138,6 +138,12 @@ function clearCanvas(context, canvas, animationSettings) {
  * Draw a rounded rectangle with the current stroke and fill
  */
 function roundedRect(ctx, x, y, width, height, radius) {
+    // Make all the variables ints to minimize bleeding
+    x = Math.floor(x);
+    y = Math.floor(y);
+    width = Math.floor(width);
+    height = Math.floor(height);
+    radius = Math.floor(radius);
     ctx.beginPath();
     ctx.moveTo(x, y + radius);
     ctx.arcTo(x, y + height, x + radius, y + height, radius);
@@ -153,6 +159,12 @@ function roundedRect(ctx, x, y, width, height, radius) {
  * pointing to the person who sent the text.
  */
 function roundedRectWithTail(ctx, x, y, width, height, radius, left = true) {
+    // Make all the variables ints to minimize bleeding
+    x = Math.floor(x);
+    y = Math.floor(y);
+    width = Math.floor(width);
+    height = Math.floor(height);
+    radius = Math.floor(radius);
     // The bottom left border radius center
     var borderRadiusCenter = {x: x + radius,y: y + height - radius};
     // Stuff to do with meeting the border radius where it would usually be

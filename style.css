@@ -38,6 +38,10 @@ td {
     padding: 3px 6px;
 }
 
+td input[type="text"], td input[type="number"] {
+    width: 100px;
+}
+
 /* All sliders */
 .range {
     width: 50px;
@@ -130,10 +134,6 @@ select {
 #saveButtons {
     display: flex;
     justify-content: space-around;
-}
-
-.sizeInput {
-    width: 100px;
 }
 
 .horizontalCenter {

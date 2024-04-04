@@ -26,8 +26,14 @@ recordMp4Button.addEventListener("click", (clickEvent) => {
 
 function startRecording() {
     const canvas = document.querySelector("#animCanvas");
+    const bitRateInput = document.querySelector("#bitRate");
     if (!MediaRecorder.isTypeSupported(mimeType)) {
         alert("Video type not supported by user");
+        returnButtonsToNormal();
+        return;
+    }
+    if (!Number(bitRateInput.value)) {
+        alert("Invalid bitrate set by user");
         returnButtonsToNormal();
         return;
     }
@@ -36,7 +42,8 @@ function startRecording() {
     var options = { mimeType: mimeType,
         type: 'video',
         width: canvas.width,
-        height: canvas.height
+        height: canvas.height,
+        videoBitsPerSecond: bitRateInput.value
     };
     mediaRecorder = new MediaRecorder(stream, options);
     recordedChunks = [];
