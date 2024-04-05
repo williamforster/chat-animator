@@ -218,7 +218,6 @@ function roundedRectWithTail(ctx, x, y, width, height, radius, left = true) {
  * @param y     y position of the text in percent
  * @param canvas    canvas element (for width)
  * @param animationSettings     object containing the bubble width
- * @return      the height of the text bubble in pixels
  */
 function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     var bubbleWidth = animationSettings.getBubbleWidth(canvas);

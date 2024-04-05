@@ -55,8 +55,9 @@ export class ChatMessage {
             // If the line is too wide, draw the current line and start a new one
             if (testWidth > maxWidth && n > 0) {
                 line = words[n] + ' ';
-                y += animationSettings.lineHeight;
-                
+                if (n != words.length - 1 || line != ' ') {
+                    y += animationSettings.lineHeight;
+                }
             }
             else {
                 line = testLine;
