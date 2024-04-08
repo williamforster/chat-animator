@@ -26,7 +26,7 @@ export class AnimationSettings {
     // How long the messages should spend stationary
     durationMessageHold = 1.0;
     chatBubbleWidthPercent = 0.65;
-    chatBubbleSpacingPixels = 20;
+    chatBubbleSpacingPixels = 30;
     // Text inset as a fraction of the total chat bubble width
     textInsetWidth = 0.06;
     // Text height inset as a fraction of the total chat bubble width

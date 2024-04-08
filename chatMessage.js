@@ -32,6 +32,9 @@ export class ChatMessage {
      * @return the required width for the text, and the height
      */
     getSize(ctx, canvas, animationSettings) {
+        if (this.message == '') {
+            this.message = ' ';
+        }
         var words = this.message.split(' ');
         var line = '';
         var y = 0;
@@ -69,7 +72,10 @@ export class ChatMessage {
         }
         widthRequired += 2 * widthInset;
         widthRequired = Math.floor(widthRequired);
-        const messageHeight = y + animationSettings.lineHeight + (2 * heightInset);
+        var messageHeight = y + animationSettings.lineHeight + (2 * heightInset);
+        if (animationSettings.showNames) {
+            messageHeight
+        }
         //console.log(`textwidth: ${maxWidth}, maxWidth: ${maxWidth}, req:${widthRequired}`);
         return { widthRequired, messageHeight };
     }
