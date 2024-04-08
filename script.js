@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fontInput = document.getElementById('font');
     const showNamesInput = document.getElementById('showNames');
     const showTailsInput = document.getElementById('showTails');
+    const frameSpecifyInput = document.getElementById('frameSpecify');
     const backColorInput = document.getElementById('backColor');
     const backAlphaInput = document.getElementById('backAlpha');
     const newProfileButton = document.getElementById('newProfile');
@@ -111,6 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
     showTailsInput.addEventListener('input', () => {
         animationSettings.showTails = showTailsInput.checked;
     });
+    frameSpecifyInput.addEventListener('input', () => {
+        animationSettings.frameSpecify = frameSpecifyInput.checked;
+        holdDurationInput.disabled = frameSpecifyInput.checked;
+        startDelayInput.disabled = frameSpecifyInput.checked;
+        calculateStartFrames();
+        setupTextEntry();
+    });
 
     function updateBackcolor() {
         animationSettings.backColor = addAlpha(backColorInput.value,
@@ -135,7 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
         setupTextEntry();
     });
     newMessageButton.addEventListener('click', () => {
-        allChatMessages.push(new ChatMessage("", chatProfiles[0]));
+        var newMsg = new ChatMessage("", chatProfiles[0]);
+        if (animationSettings.frameSpecify) {
+            var lastFrame = 0;
+            for (var msg of allChatMessages) { lastFrame = Math.max(lastFrame, msg.enterFrame); }
+            newMsg.enterFrame = lastFrame +
+                animationSettings.frameRate *
+                 (animationSettings.durationMessageSlideUp + animationSettings.durationMessageHold);
+        }
+        allChatMessages.push(newMsg);
         setupTextEntry();
         playAnimationFromStart();
     });
@@ -197,6 +213,17 @@ function setupTextEntry() {
             playAnimationFromStart();
         });
         chatMessageRowDiv.appendChild(textInput);
+
+        if (animationSettings.frameSpecify) {
+            const frameInput = document.createElement('input');
+            frameInput.type = 'number';
+            frameInput.value = allChatMessages[i].enterFrame;
+            frameInput.addEventListener('input', () => {
+                chatMsg.enterFrame = Number(frameInput.value);
+                playAnimationFromStart();
+            });
+            chatMessageRowDiv.appendChild(frameInput);
+        }
         
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = "-";
@@ -235,5 +262,21 @@ function deleteProfile(profile) {
                          deleteProfile,
                          fileInput);
         setupTextEntry();
+    }
+}
+
+/**
+ * Calculate a sensible start frame for all chat messages based
+ * on the hold time and animation speed.
+ */
+function calculateStartFrames() {
+    var frameNumber = 0;
+    frameNumber += Math.floor(animationSettings.startDelay * animationSettings.frameRate);
+    for (var i = 0; i < allChatMessages.length; i++) {
+        allChatMessages[i].enterFrame = frameNumber;
+        console.log(`Set message ${i} to enter frame ${frameNumber}`);
+        frameNumber = Math.floor(frameNumber + 
+            (animationSettings.durationMessageSlideUp + animationSettings.durationMessageHold) * 
+            animationSettings.frameRate);
     }
 }

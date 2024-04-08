@@ -13,6 +13,7 @@ export class ChatMessage {
         this.desiredPosition = 1.1;
         this.actualPosition = 1.1;
         this.startPosition = 1.1;
+        this.enterFrame = 0;
     }
     
     getMessage() {

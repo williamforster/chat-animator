@@ -17,7 +17,6 @@ import { recording, finishedRecording } from './recording.js';
 import {ChatMessage} from './chatMessage.js';
 
 var frameNumber = 0;
-var frameRate = 60;
 var canvas = document.getElementById("animCanvas");
 
 export class AnimationSettings {
@@ -40,10 +39,14 @@ export class AnimationSettings {
     showNames = true;
     showTails = true;
     nameSizePercent = 0.12;
+    // Messages enter at an exact specified frame
+    frameSpecify = false;
     
     backColor = "#ffffffff";
     // nudge the profile pics away from the edge of screen
     nudgeProfiles = 5;
+
+    frameRate = 60;
     
     /**
      * Get the width of the text bubble rectangle given the canvas width
@@ -60,11 +63,15 @@ export class AnimationSettings {
         const textInset = bubbleWidth * this.textInsetWidth;
         return Math.floor(bubbleWidth - 2 * textInset);
     }
+
+    getAnimationFrameCount() {
+        return Math.floor(durationMessageSlideUp * frameRate);
+    }
 }
 
 // Set to -1 as a reset flag for chat messages. This happens in the drawFrame function
 // which has access to the chat messages.
-var currentMessageIndex = -1;
+var currentMessageCount = 0;
 
 
 
@@ -80,7 +87,7 @@ export function drawFrame(allChatMessages, animationSettings) {
     clearCanvas(ctx, canvas, animationSettings);
     
     // Reset the message positions
-    if (currentMessageIndex === -1) {
+    if (frameNumber == 0) {
         // resetMessagePositions
         for (var i = 0; i < allChatMessages.length; i++) {
             allChatMessages[i].desiredPosition = 1.1;
@@ -89,23 +96,38 @@ export function drawFrame(allChatMessages, animationSettings) {
         }
     }
     
-    var {idxOfMessagesOnScreen, timeIntoThisMessage} = getOnScreenMessageIndex(allChatMessages, animationSettings);
-    if (currentMessageIndex != idxOfMessagesOnScreen) {
-        currentMessageIndex = idxOfMessagesOnScreen
+    var {onScreenMessages, timeIntoThisMessage} = getOnScreenMessages(allChatMessages, animationSettings);
+    if (currentMessageCount != onScreenMessages.length) {
+        currentMessageCount = onScreenMessages.length
         // set all the start positions
-        for (var i = 0; i <= currentMessageIndex; i++) {
-            allChatMessages[i].startPosition = allChatMessages[i].actualPosition;
+        for (var i = 0; i < onScreenMessages.length; i++) {
+            if (animationSettings.frameSpecify) {
+                if (onScreenMessages[i].enterFrame == frameNumber) {
+                    onScreenMessages[i].startPosition = 1.1;
+                } else {
+                    onScreenMessages[i].startPosition = onScreenMessages[i].actualPosition;
+                }
+            }
+             else {
+                onScreenMessages[i].startPosition = onScreenMessages[i].actualPosition;
+             }
         }
     }
     
-    layout(ctx, allChatMessages, frameNumber / frameRate, canvas, animationSettings);
-    drawAllTextBubbles(ctx, allChatMessages, canvas, animationSettings);
+    layout(ctx, onScreenMessages, frameNumber / animationSettings.frameRate, canvas, animationSettings);
+    drawAllTextBubbles(ctx, onScreenMessages, canvas, animationSettings);
     
     frameNumber += 1;
-    const finishTime = allChatMessages.length *
+    var finishTime = allChatMessages.length *
             (animationSettings.durationMessageHold + animationSettings.durationMessageSlideUp) +
             (2 * animationSettings.startDelay);
-    if (frameNumber > frameRate * finishTime) {
+    if (animationSettings.frameSpecify) {
+        var latest = 0;
+        for (var msg of allChatMessages) { latest = Math.max(msg.enterFrame, latest); }
+        finishTime = (latest / animationSettings.frameRate) + animationSettings.durationMessageSlideUp +
+            animationSettings.startDelay;
+    }
+    if (frameNumber > animationSettings.frameRate * finishTime) {
         if (recording) {
             finishedRecording();
         }
@@ -118,7 +140,7 @@ export function drawFrame(allChatMessages, animationSettings) {
  */
 export function playAnimationFromStart() {
     frameNumber = 0;
-    currentMessageIndex = -1;
+    currentMessageCount = 0;
 }
 
 /**
@@ -300,41 +322,61 @@ function drawAllTextBubbles(ctx, messages, canvas, animationSettings) {
  * @param chatMessages  array of ChatMessage
  * @return {indexOfCurrentMessage, timeIntoMessageAnimation}
  */
-function getOnScreenMessageIndex(chatMessages, animationSettings) {
-    // Keep elapsed time at 0 until delay time is over
-    const elapsedTime = Math.max((frameNumber / frameRate) -
-                                 animationSettings.startDelay, 0.0);
-    const timePerMessage = animationSettings.durationMessageHold +
-                            animationSettings.durationMessageSlideUp;
-    const idxOfMessagesOnScreen = Math.min(chatMessages.length - 1,
-                    Math.floor(elapsedTime / timePerMessage));
-    const startTimeThisMessage = timePerMessage * idxOfMessagesOnScreen;
-    const timeIntoThisMessage = elapsedTime - startTimeThisMessage;
-    return {idxOfMessagesOnScreen, timeIntoThisMessage};
+function getOnScreenMessages(chatMessages, animationSettings) {
+    var onScreenMessages = [];
+    var timeIntoThisMessage = 0;
+    if (animationSettings.frameSpecify) {
+        var latest = 0;
+        for (var i = 0; i < chatMessages.length; i++) {
+            if (frameNumber >= chatMessages[i].enterFrame) {
+                latest = Math.max(latest, chatMessages[i].enterFrame);
+                onScreenMessages.push(chatMessages[i]);
+            }
+        }
+        
+        if (animationSettings.durationMessageSlideUp > 0) {
+            timeIntoThisMessage = (frameNumber - latest) /
+             (animationSettings.durationMessageSlideUp * animationSettings.frameRate);
+        } else {
+            timeIntoThisMessage = 0;
+        }
+        return {onScreenMessages, timeIntoThisMessage};
+    } else {
+        // Keep elapsed time at 0 until delay time is over
+        const elapsedTime = Math.max((frameNumber / animationSettings.frameRate) -
+            animationSettings.startDelay, 0.0);
+        const timePerMessage = animationSettings.durationMessageHold +
+        animationSettings.durationMessageSlideUp;
+        const idxOfMessagesOnScreen = Math.min(chatMessages.length - 1,
+        Math.floor(elapsedTime / timePerMessage));
+        const startTimeThisMessage = timePerMessage * idxOfMessagesOnScreen;
+        const timeIntoThisMessage = elapsedTime - startTimeThisMessage;
+        for (var i = 0; i <= idxOfMessagesOnScreen; i++) {
+            onScreenMessages.push(chatMessages[i]);
+        }
+        return {onScreenMessages, timeIntoThisMessage};
+    }
+    
 }
 
 /**
  * Get the pixel height of all on-screen messages.
  * @param ctx           The drawing context
- * @param chatMessages  Array of ChatMessage class
+ * @param onScreenMessages  Array of ChatMessage class
  * @param canvas        The canvas element
  */
-function getOnScreenMessagesSize(ctx, chatMessages, canvas, animationSettings) {
+function getOnScreenMessagesSize(ctx, onScreenMessages, canvas, animationSettings) {
     var totalSize = 0;
-    if (currentMessageIndex >= chatMessages.length || currentMessageIndex < 0) {
-        console.log("Error in animation.js: getOnScreenMessagesSize");
-        return 20;
-    }
     const textWidth = animationSettings.getTextWidth(canvas);
-    for (var i = 0; i <= currentMessageIndex; i++) {
-        let { widthRequired, messageHeight }  = chatMessages[i].getSize(ctx,
+    for (var msg of onScreenMessages) {
+        let { widthRequired, messageHeight }  = msg.getSize(ctx,
                                                   canvas,
                                                   animationSettings);
         totalSize += messageHeight;
     }
     totalSize += animationSettings.nameSizePercent * canvas.width;
     return totalSize + animationSettings.chatBubbleSpacingPixels *
-            currentMessageIndex;
+            (onScreenMessages.length - 1);
 }
 
 /**
@@ -358,7 +400,7 @@ function layout(ctx, chatMessages, elapsedTime, canvas, animationSettings) {
     } else {
         baseHeight = 0.5 + (onScreenHeightPixels / (canvas.height * 2));
     }
-    for (var i = currentMessageIndex; i >= 0; i--) {
+    for (var i = chatMessages.length - 1; i >= 0; i--) {
         let { widthRequired, messageHeight }  = chatMessages[i].getSize(ctx,
                                                     canvas,
                                                     animationSettings);
@@ -372,7 +414,7 @@ function layout(ctx, chatMessages, elapsedTime, canvas, animationSettings) {
     
     
     // Set the actual positions.
-    var {x, timeIntoThisMessage} = getOnScreenMessageIndex(chatMessages, animationSettings);
+    var {x, timeIntoThisMessage} = getOnScreenMessages(chatMessages, animationSettings);
     //console.log(`Time into animation: ${timeIntoThisMessage}`);
     
     for (var i = 0; i < chatMessages.length; i++) {

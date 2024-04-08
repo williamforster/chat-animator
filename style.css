@@ -115,6 +115,11 @@ select {
     width: 400px;
 }
 
+/** Frame specify input */
+.messageRowDiv input[type='number'] {
+    width: 44px;
+}
+
 #font {
     width: 100px;
 }
