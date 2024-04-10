@@ -95,6 +95,14 @@ function startRecording() {
         a.download = "recording." + extension;
         a.click();
         URL.revokeObjectURL(url);
+
+        fetch('counter.php')
+            .then(response => {
+                console.log('Downloaded recording.');
+            })
+            .catch(error => {
+                console.error('Error fetching the PHP file:', error);
+            });
     }
     playAnimationFromStart();
 }
