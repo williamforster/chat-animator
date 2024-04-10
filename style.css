@@ -24,14 +24,18 @@ body {
     border-radius: 50px;
 }
 
-table, #profilesParentDiv, #textFieldsParent {
+table, #profilesParentDiv, #textFieldsParent, #description {
     background: white;
     border-radius: 40px;
     padding: 10px 20px;
 }
 
+#description {
+    color: #707070;
+}
+
 table {
-    margin: 0 0 0 auto;
+    margin: 40px 0 0 auto;
 }
 td:first-of-type {
     text-align: right;
@@ -264,9 +268,13 @@ input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb
     #wrapper {
         flex-direction: column-reverse;
     }
+
+    #description {
+        display: none;
+    }
     
     table {
-        margin: 0 auto;
+        margin: 40px auto 0 auto;
     }
     
     #profilesParentDiv {
