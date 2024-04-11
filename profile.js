@@ -5,6 +5,8 @@
 
 import { playAnimationFromStart } from './animation.js'
 
+const cloudIconUrl = "./images/cloud.svg"
+
 /**
  * Profile class, with the profile image, and a name
  */
@@ -92,7 +94,7 @@ export function updateProfileDiv(divElement, profiles, setupTextEntry, deletePro
         
         const uploadIcon = document.createElement('img');
         uploadIcon.className = "uploadIcon";
-        uploadIcon.src = './cloud.svg';
+        uploadIcon.src = cloudIconUrl;
         imageDiv.appendChild(uploadIcon);
         
         

@@ -4,10 +4,10 @@ import {ChatMessage} from './chatMessage.js';
 
 // The image/name pairs that are displayed
 var chatProfiles = [];
-chatProfiles.push(new Profile('Grump', './char1.svg', '#218aff', true, '#ffffff'));
-chatProfiles.push(new Profile('Olivia', './senior-transparent.svg', '#d8d8d8'));
-chatProfiles.push(new Profile('Chad', './char2.svg'));
-chatProfiles.push(new Profile('Tischman', './char3.svg'));
+chatProfiles.push(new Profile('Grump', './images/char1.svg', '#218aff', true, '#ffffff'));
+chatProfiles.push(new Profile('Olivia', './images/senior-transparent.svg', '#d8d8d8'));
+chatProfiles.push(new Profile('Chad', './images/char2.svg'));
+chatProfiles.push(new Profile('Tischman', './images/char3.svg'));
 
 // All chat messages, whether on screen yet or not
 var allChatMessages = [];
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Set up the part where user enters the text that appears
+ * Set up the part where user enters the message text that appears
  */
 function setupTextEntry() {
     const textEntryDiv = document.getElementById("textFields");
