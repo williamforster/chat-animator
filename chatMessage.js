@@ -10,9 +10,12 @@ export class ChatMessage {
     constructor(message, profile) {
         this.profile = profile;
         this.message = message;
+        // The positions on screen, in fraction of screen height.
+        // Start past the bottom of the screen
         this.desiredPosition = 1.1;
         this.actualPosition = 1.1;
         this.startPosition = 1.1;
+        // When using frame specify, which exact frame to enter the screen on.
         this.enterFrame = 0;
     }
     
@@ -25,12 +28,13 @@ export class ChatMessage {
     }
     
     /**
-     * Get the height of this message in pixels given the
-     * width of the message bubbles.
+     * Get the height and width of this message in pixels.
+     * If the text is smaller than one line, only the necessary
+     * width will be drawn.
      * @param ctx           the drawing context
      * @param canvas        the drawing canvas
      * @param animationSettings the settings to calculate layout
-     * @return the required width for the text, and the height
+     * @return the required width for the text, and the height in pixels
      */
     getSize(ctx, canvas, animationSettings) {
         if (this.message == '') {

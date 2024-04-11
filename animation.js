@@ -86,9 +86,8 @@ export function drawFrame(allChatMessages, animationSettings) {
     const ctx = canvas.getContext("2d");
     clearCanvas(ctx, canvas, animationSettings);
     
-    // Reset the message positions
+    // Reset the message positions to offscreen on the first frame
     if (frameNumber == 0) {
-        // resetMessagePositions
         for (var i = 0; i < allChatMessages.length; i++) {
             allChatMessages[i].desiredPosition = 1.1;
             allChatMessages[i].actualPosition = 1.1;
@@ -96,6 +95,8 @@ export function drawFrame(allChatMessages, animationSettings) {
         }
     }
     
+    // If there is a new bubble appearing this frame, change all the startPositions of the
+    // chat messages to their current y position.
     var {onScreenMessages, timeIntoThisMessage} = getOnScreenMessages(allChatMessages, animationSettings);
     if (currentMessageCount != onScreenMessages.length) {
         currentMessageCount = onScreenMessages.length
@@ -114,10 +115,13 @@ export function drawFrame(allChatMessages, animationSettings) {
         }
     }
     
-    layout(ctx, onScreenMessages, frameNumber / animationSettings.frameRate, canvas, animationSettings);
+    // Calculate the desired position of each bubble and the actual position of each bubble
+    layout(ctx, onScreenMessages, canvas, animationSettings);
     drawAllTextBubbles(ctx, onScreenMessages, canvas, animationSettings);
     
     frameNumber += 1;
+
+    // Check to see if we are finished all animations
     var finishTime = allChatMessages.length *
             (animationSettings.durationMessageHold + animationSettings.durationMessageSlideUp) +
             (2 * animationSettings.startDelay);
@@ -237,9 +241,9 @@ function roundedRectWithTail(ctx, x, y, width, height, radius, left = true) {
  * @param ctx   the drawing context
  * @param message  the ChatMessage item
  * @param left  boolean - if the bubble is on the left or right of the screen
- * @param y     y position of the text in percent
+ * @param y     y position of the text as a fraction of the canvas height
  * @param canvas    canvas element (for width)
- * @param animationSettings     object containing the bubble width
+ * @param animationSettings     object containing the bubble width, among others
  */
 function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     var bubbleWidth = animationSettings.getBubbleWidth(canvas);
@@ -317,10 +321,10 @@ function drawAllTextBubbles(ctx, messages, canvas, animationSettings) {
 }
 
 /**
- * Get the index up to which messages are currently on screen - or sliding
- * on screen. Also return the time the current message has been animating for
+ * Get the messages that are currently on screen - or sliding
+ * on screen. Also return the time the current message has been animating for in seconds
  * @param chatMessages  array of ChatMessage
- * @return {indexOfCurrentMessage, timeIntoMessageAnimation}
+ * @return {onScreenMessages, timeIntoMessageAnimation}
  */
 function getOnScreenMessages(chatMessages, animationSettings) {
     var onScreenMessages = [];
@@ -383,10 +387,9 @@ function getOnScreenMessagesSize(ctx, onScreenMessages, canvas, animationSetting
  * Set the positions of all chatMessages
  * @param ctx           the drawing context
  * @param chatMessages  array of ChatMessage class
- * @param elapsedTime   time in seconds since very start of animation
  * @param canvas        the canvas (for width and height)
  */
-function layout(ctx, chatMessages, elapsedTime, canvas, animationSettings) {
+function layout(ctx, chatMessages, canvas, animationSettings) {
     const bubbleWidth = animationSettings.getBubbleWidth(canvas);
     const textWidth = animationSettings.getTextWidth(canvas);
     // Get the height of on-screen chat messages

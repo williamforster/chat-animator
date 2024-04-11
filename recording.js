@@ -73,11 +73,7 @@ function startRecording() {
  */
 export function finishedRecording() {
     mediaRecorder.stop();
-    recording = false;
-    //setTimeout(() => {
-    //},500);
-    // The example has
-    
+    recording = false;    
     returnButtonsToNormal();
 }
 
@@ -92,6 +88,10 @@ function returnButtonsToNormal() {
     recordWebmButton.className = "saveButton";
 }
 
+/**
+ * Call MediaRecorder.isTypeSupported on a bunch of codecs to find
+ * the best one that is supported.
+ */
 function getSupportedCodec(media, types, codecs) {
     const isSupported = MediaRecorder.isTypeSupported;
     const supportedArray = [];

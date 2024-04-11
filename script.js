@@ -26,6 +26,10 @@ function drawFrameParent() {
     window.requestAnimationFrame(drawFrameParent);
 }
 
+/**
+ * Onchange of the canvas size inputs. Change the canvas size,
+ * or log to console if either size input is non-numeric
+ */
 function setCanvasSize() {
     const canvasWidthInput = document.getElementById('canvasWidth');
     const canvasHeightInput = document.getElementById('canvasHeight');
@@ -52,10 +56,6 @@ function setCanvasSize() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    /**
-     * Onchange of the canvas size inputs. Change the canvas size,
-     * or log to console if either size input is non-numeric
-     */
     // Access the input field and the element to resize
     const canvasWidthInput = document.getElementById('canvasWidth');
     const canvasHeightInput = document.getElementById('canvasHeight');

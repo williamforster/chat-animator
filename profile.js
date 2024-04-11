@@ -1,3 +1,8 @@
+/**
+ * Everything to do with the fictional characters set up for the
+ * fake text exchange
+ */
+
 import { playAnimationFromStart } from './animation.js'
 
 /**
