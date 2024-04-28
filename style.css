@@ -8,6 +8,10 @@ body {
     padding: 0 40px 80px 40px;
 }
 
+h1 {
+    display: none;
+}
+
 #wrapper {
     padding: 10px 40px;
     width: min-content;
