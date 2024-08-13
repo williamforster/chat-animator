@@ -38,6 +38,7 @@ export class AnimationSettings {
     // Show names beside messages or do not show names
     showNames = true;
     showTails = true;
+    // Width (and height) of the pic in relation to the canvas
     nameSizePercent = 0.12;
     // Messages enter at an exact specified frame
     frameSpecify = false;

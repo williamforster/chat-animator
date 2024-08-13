@@ -79,7 +79,7 @@ export class ChatMessage {
         widthRequired = Math.floor(widthRequired);
         var messageHeight = y + animationSettings.lineHeight + (2 * heightInset);
         if (animationSettings.showNames) {
-            messageHeight
+            messageHeight += 0.5 * canvas.width * animationSettings.nameSizePercent;
         }
         //console.log(`textwidth: ${maxWidth}, maxWidth: ${maxWidth}, req:${widthRequired}`);
         return { widthRequired, messageHeight };
