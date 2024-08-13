@@ -25,7 +25,7 @@ export class AnimationSettings {
     // How long the messages should spend stationary
     durationMessageHold = 1.0;
     chatBubbleWidthPercent = 0.65;
-    chatBubbleSpacingPixels = 36;
+    chatBubbleSpacingPixels = 30;
     // Text inset as a fraction of the total chat bubble width
     textInsetWidth = 0.06;
     // Text height inset as a fraction of the total chat bubble width
@@ -378,8 +378,8 @@ function getOnScreenMessagesSize(ctx, onScreenMessages, canvas, animationSetting
                                                   canvas,
                                                   animationSettings);
         totalSize += messageHeight;
+        totalSize += 0.5 * animationSettings.nameSizePercent * canvas.width;
     }
-    totalSize += animationSettings.nameSizePercent * canvas.width;
     return totalSize + animationSettings.chatBubbleSpacingPixels *
             (onScreenMessages.length - 1);
 }
@@ -397,6 +397,7 @@ function layout(ctx, chatMessages, canvas, animationSettings) {
     const onScreenHeightPixels = getOnScreenMessagesSize(ctx, chatMessages, canvas, animationSettings);
     //console.log(`Total messages height ${onScreenHeightPixels}`);
     
+    // Height on screen as a fraction that the most recent message finishes
     var baseHeight = 1.0;
     if (onScreenHeightPixels > canvas.height) {
         baseHeight = 1.0 - (animationSettings.chatBubbleSpacingPixels /
@@ -411,8 +412,12 @@ function layout(ctx, chatMessages, canvas, animationSettings) {
         const thisBubbleHeight = messageHeight / canvas.height;
         chatMessages[i].desiredPosition = baseHeight - thisBubbleHeight
         //console.log(`${baseHeight} ${chatMessages[i].desiredPosition}`);
-        baseHeight -= thisBubbleHeight + 
-                        (animationSettings.chatBubbleSpacingPixels / canvas.height);
+        var pixelsBetweenMessageBubbles = animationSettings.chatBubbleSpacingPixels;
+        if (animationSettings.showNames) {
+            pixelsBetweenMessageBubbles += 0.5 * animationSettings.nameSizePercent * canvas.width;
+        }
+        baseHeight -= thisBubbleHeight +
+                        (pixelsBetweenMessageBubbles / canvas.height);
     }
     // Desired positions now set.
     
