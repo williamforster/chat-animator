@@ -50,6 +50,14 @@ recordGifButton.addEventListener("click", (clickEvent) => {
         a.click();
         URL.revokeObjectURL(url);
         returnButtonsToNormal();
+        
+        fetch('counter.php')
+        .then(response => {
+            console.log('Downloaded recording.');
+        })
+        .catch(error => {
+            console.error('Error fetching the PHP file:', error);
+        });
     });
     
     playAnimationFromStart();
