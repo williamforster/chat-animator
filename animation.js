@@ -13,7 +13,7 @@
  * New bubbles are placed with an actual position just off screen.
  */
 
-import { recording, finishedRecording } from './recording.js';
+import { gifRecord, gifRecording, recording, finishedRecording } from './recording.js';
 import {ChatMessage} from './chatMessage.js';
 
 var frameNumber = 0;
@@ -120,6 +120,11 @@ export function drawFrame(allChatMessages, animationSettings) {
     layout(ctx, onScreenMessages, canvas, animationSettings);
     drawAllTextBubbles(ctx, onScreenMessages, canvas, animationSettings);
     
+    if (gifRecording) {
+        gifRecord.addFrame(canvas, {copy: true, delay: 1000 / animationSettings.frameRate});
+        //gifRecord.addFrame(ctx);
+    }
+    
     frameNumber += 1;
 
     // Check to see if we are finished all animations
@@ -133,7 +138,7 @@ export function drawFrame(allChatMessages, animationSettings) {
             animationSettings.startDelay;
     }
     if (frameNumber > animationSettings.frameRate * finishTime) {
-        if (recording) {
+        if (recording || gifRecording) {
             finishedRecording();
         }
         playAnimationFromStart();

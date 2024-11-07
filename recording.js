@@ -2,8 +2,15 @@ import {playAnimationFromStart} from './animation.js';
 
 const recordWebmButton = document.querySelector("#saveWebmButton");
 const recordMp4Button = document.querySelector("#saveMp4Button");
+const recordGifButton = document.querySelector("#saveGifButton");
 
 export let recording = false;
+export let gifRecording = false;
+// Global for recording frames to gif
+export let gifRecord = new GIF({
+    workers: 2,
+    quality: 10
+});
 let mediaRecorder;
 let recordedChunks;
 let mimeType = "video/mp4;";
@@ -22,6 +29,31 @@ recordMp4Button.addEventListener("click", (clickEvent) => {
     recordMp4Button.innerHTML = 'Recording';
     recordMp4Button.className += " recording";
     startRecording();
+});
+
+recordGifButton.addEventListener("click", (clickEvent) => {
+    recordGifButton.innerHTML = 'Recording';
+    recordGifButton.className += " recording";
+    const canvas = document.querySelector("#animCanvas");
+    
+    gifRecord = new GIF({
+        workers: 3,
+        quality: 12
+    });
+    
+    
+    gifRecord.on('finished', function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "recording.gif";
+        a.click();
+        URL.revokeObjectURL(url);
+        returnButtonsToNormal();
+    });
+    
+    playAnimationFromStart();
+    gifRecording = true;
 });
 
 function startRecording() {
@@ -72,9 +104,17 @@ function startRecording() {
  * reaches the end
  */
 export function finishedRecording() {
-    mediaRecorder.stop();
-    recording = false;    
-    returnButtonsToNormal();
+    if (recording) {
+        mediaRecorder.stop();
+        recording = false;
+        returnButtonsToNormal();
+    }
+    if ( gifRecording ) {
+        gifRecording = false;
+        gifRecord.render();
+        recordGifButton.innerHTML = 'rendering';
+    }
+    
 }
 
 /***
@@ -86,6 +126,8 @@ function returnButtonsToNormal() {
     recordMp4Button.className = "saveButton";
     recordWebmButton.innerHTML = 'Save .webm';
     recordWebmButton.className = "saveButton";
+    recordGifButton.innerHTML = 'Save .gif';
+    recordGifButton.className = "saveButton";
 }
 
 /**
