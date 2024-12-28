@@ -51,7 +51,7 @@ recordGifButton.addEventListener("click", (clickEvent) => {
         URL.revokeObjectURL(url);
         returnButtonsToNormal();
         
-        fetch('counter.php')
+        fetch('./counter.php')
         .then(response => {
             console.log('Downloaded recording.');
         })
@@ -104,7 +104,7 @@ function startRecording() {
         a.click();
         URL.revokeObjectURL(url);
 
-        fetch('counter.php')
+        fetch('./counter.php')
             .then(response => {
                 console.log('Downloaded recording.');
             })

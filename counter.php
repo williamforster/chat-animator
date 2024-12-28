@@ -1,6 +1,6 @@
 <?php
 // Specify the path to your text file
-$filePath = '~/counter.txt';
+$filePath = '../../chat-anim-counter.txt';
 
 // Check if the file exists and is less than 200MB, or if it doesn't exist
 if (!file_exists($filePath) || (file_exists($filePath) && filesize($filePath) < 209715200)) {
