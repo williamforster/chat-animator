@@ -10,138 +10,142 @@
     </head>
     <body>
         <div id="wrapper" class="wrapper">
-        <div id="controlsDiv">
-            <div id="description">
-                <h1>Chat-Animator</h1>
-                <p>A free tool to create fake phone chat animations. 
-                    Export to .gif, or .webm / .mp4 video, depending on your browser support.</p>
-            </div>
-            <table>
-                <tr>
-                    <td>
-                        <label for="animationDuration">Animation Duration:</label>
-                    </td>
-                    <td>
-                        <input id="animationDuration" class="range" type="range" min="0.001" max="5.0" step="0.01"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="holdDuration">Hold Duration:</label>
-                    </td>
-                    <td>
-                        <input id="holdDuration" class="range" type="range" min="0.001" max="5.0" step="0.1"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="startDelay">Start Delay:</label>
-                    </td>
-                    <td>
-                        <input id="startDelay" class="range" type="range" min="0.001" max="2.0" step="0.01"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="bitRate">Bitrate:</label>
-                    </td>
-                    <td>
-                        <input type="text" id="bitRate" value="2500000"/>
-                    </td>
-                </tr>
+            <div id="controlsDiv">
+                <div id="description">
+                    <h1>Chat-Animator</h1>
+                    <p>A free tool to create fake phone chat animations.
+                        Export to .gif, or .webm / .mp4 video, depending on your browser support.</p>
+                </div>
+                <table>
+                    <tr>
+                        <td>
+                            <label for="animationDuration">Animation Duration:</label>
+                        </td>
+                        <td>
+                            <input id="animationDuration" class="range" type="range" min="0.001" max="5.0" step="0.01"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="holdDuration">Hold Duration:</label>
+                        </td>
+                        <td>
+                            <input id="holdDuration" class="range" type="range" min="0.001" max="5.0" step="0.1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="startDelay">Start Delay:</label>
+                        </td>
+                        <td>
+                            <input id="startDelay" class="range" type="range" min="0.001" max="2.0" step="0.01"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="bitRate">Bitrate:</label>
+                        </td>
+                        <td>
+                            <input type="text" id="bitRate" value="2500000"/>
+                        </td>
+                    </tr>
 
-                <tr>
-                    <td>
-                        <label for="font">Css style font:</label>
-                    </td>
-                    <td>
-                        <input type="text" id="font" value="32px sans-serif"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="canvasWidth">Canvas Width:</label>
-                    </td>
-                    <td>
-                        <input type="number" class="sizeInput" id="canvasWidth" value="640"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="canvasHeight">Canvas Height:</label>
-                    </td>
-                    <td>
-                        <input type="number" class="sizeInput" id="canvasHeight" value="1278"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="backColor">Canvas Color:</label>
-                    </td>
-                    <td>
-                        <input type="color" class="picker" id="backColor" value="#ffffff"/>
-                        <input type="range" class="range" id="backAlpha" min="0.00" max="1.0" step="0.01" value="1.0"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="showNames">Show Names:</label>
-                    </td>
-                    <td>
-                        <input type="checkbox" checked='true' id="showNames"/>
-                    </td>
-                </tr>
-		        <tr>
-                    <td>
-                        <label for="showTails">Show Tails:</label>
-                    </td>
-                    <td>
-                        <input type="checkbox" checked='true' id="showTails"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="frameSpecify">Frame Specify:</label>
-                    </td>
-                    <td>
-                        <input type="checkbox" id="frameSpecify"/>
-                    </td>
-                </tr>
-            </table>
-            <div id="profilesParentDiv">
-                <div id="profiles">
+                    <tr>
+                        <td>
+                            <label for="font">Css style font:</label>
+                        </td>
+                        <td>
+                            <input type="text" id="font" value="32px sans-serif"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="canvasWidth">Canvas Width:</label>
+                        </td>
+                        <td>
+                            <input type="number" class="sizeInput" id="canvasWidth" value="640"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="canvasHeight">Canvas Height:</label>
+                        </td>
+                        <td>
+                            <input type="number" class="sizeInput" id="canvasHeight" value="1278"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="backColor">Canvas Color:</label>
+                        </td>
+                        <td>
+                            <input type="color" class="picker" id="backColor" value="#ffffff"/>
+                            <input type="range" class="range" id="backAlpha" min="0.00" max="1.0" step="0.01" value="1.0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="showNames">Show Names:</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" checked='true' id="showNames"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="showTails">Show Tails:</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" checked='true' id="showTails"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="frameSpecify">Frame Specify:</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" id="frameSpecify"/>
+                        </td>
+                    </tr>
+                </table>
+                <div id="profilesParentDiv">
+                    <div id="profiles">
+                    </div>
+                    <div class="horizontalCenter">
+                        <button id="newProfile" class="newThing"><img src='./images/plus.svg' alt="a plus symbol"/></button>
+                    </div>
                 </div>
-                <div class="horizontalCenter">
-                    <button id="newProfile" class="newThing"><img src='./images/plus.svg' alt="a plus symbol"/></button>
+                <div id="textFieldsParent">
+                    <div id="textFields">
+                    </div>
+                    <div class="horizontalCenter">
+                        <button id="newMessage" class="newThing"><img src='./images/plus.svg' alt="a plus symbol"/></button>
+                    </div>
                 </div>
             </div>
-            <div id="textFieldsParent">
-                <div id="textFields">
+            
+            <div id="canvasAndSaveButtons">
+                <div id="canvasParent">
+                    <canvas id="animCanvas">
+                        Your browser does not support the canvas element.
+                    </canvas>
                 </div>
-                <div class="horizontalCenter">
-                    <button id="newMessage" class="newThing"><img src='./images/plus.svg' alt="a plus symbol"/></button>
+                <br>
+                <div id="saveButtons">
+                    <button id="saveWebmButton" class="saveButton">Save .webm</button>
+                    <button id="saveMp4Button" class="saveButton">Save .mp4</button>
+                    <button id="saveGifButton" class="saveButton">Save .gif</button>
                 </div>
-            </div>
-        </div>
-        
-        <div id="canvasAndSaveButtons">
-            <div id="canvasParent">
-                <canvas id="animCanvas">
-                    Your browser does not support the canvas element.
-                </canvas>
-            </div>
-            <br>
-            <div id="saveButtons">
-                <button id="saveWebmButton" class="saveButton">Save .webm</button>
-                <button id="saveMp4Button" class="saveButton">Save .mp4</button>
-                <button id="saveGifButton" class="saveButton">Save .gif</button>
-            </div>
-            <br>
+                <br>
+            </div><!-- controlsDiv -->
+        </div><!-- wrapper -->
+        <div id="shadow" style="z-index:-1;position:absolute;">
         </div>
         <script src="./gif.js"></script>
         <script src="./gif.worker.js"></script>
         <script type="module" src="script.js"></script>
-        </div>
+        <script src="shadow.js"></script>
+        
         <!--<div id="wrapper2" class="wrapper">
             <video id="video" autoplay="true" loop muted>
                 <source src="./Amorn-mimi-pixabay-overlay.mp4"/>

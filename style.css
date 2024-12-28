@@ -4,7 +4,8 @@
 }
 
 body {
-    background: #ffcd85;
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 7%, rgba(153,153,153,1) 100%);
     padding: 0 40px 80px 40px;
 }
 
@@ -24,7 +25,7 @@ h1 {
     align-items: top;
     color: #141122;
     font-family: sans-serif;
-    box-shadow: 40px 28px 15px #00000030;
+    /**box-shadow: 40px 28px 15px #00000030;*/
     border-radius: 50px;
 }
 
