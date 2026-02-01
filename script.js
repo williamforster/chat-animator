@@ -225,11 +225,26 @@ function setupTextEntry() {
             chatMessageRowDiv.appendChild(frameInput);
         }
         
-        if (allChatMessages[i].imageInput) {
-            chatMessageRowDiv.appendChild(allChatMessages[i].imageInput);
+        if (allChatMessages[i].image instanceof HTMLImageElement) {
+            const removeImageButton = document.createElement('button')
+            removeImageButton.innerHTML = "x";
+            removeImageButton.addEventListener("click", (event) => {
+                chatMsg.imageInput = null;
+                chatMsg.image = null;
+                chatMsg.textInput.disabled = false;
+                chatMsg.textInput.style.backgroundColor = 'white';
+                setupTextEntry();
+            });
+            removeImageButton.className = "removeImageButton";
+            chatMessageRowDiv.appendChild(removeImageButton);
+            //chatMessageRowDiv.appendChild(allChatMessages[i].imageInput);
+            allChatMessages[i].textInput.disabled = true;
+            allChatMessages[i].textInput.style.backgroundColor = '#ddd';
         } else {
             const imageInput = document.createElement('input');
             imageInput.type = "file"
+            imageInput.className = "imageInput";
+            imageInput.accept = "image/*"
             allChatMessages[i].imageInput = imageInput
             //imageInput.value = allChatMessages[i].imagePath;
             imageInput.addEventListener("change", (event) => {
@@ -240,8 +255,9 @@ function setupTextEntry() {
                 reader.onload = () => {
                     chatMsgClosure.image = new Image();
                     chatMsgClosure.image.src = reader.result;
-                    chatMsgClosure.textInput.disabled = true;
-                    chatMsgClosure.textInput.style.backgroundColor = '#ddd';
+                    //chatMsgClosure.textInput.disabled = true;
+                    //chatMsgClosure.textInput.style.backgroundColor = '#ddd';
+                    setupTextEntry();
                 };
                 reader.readAsDataURL(file);
             });

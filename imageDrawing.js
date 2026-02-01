@@ -20,7 +20,7 @@ export function drawImageCoverFramed(ctx, img, {
   frameWidth,
   frameHeight,        // set this to your max height
   radius = 16,
-  borderWidth = 3,
+  borderWidth = 0,
   borderColor = "#000",
   background = null,  // optional fill behind image
   imageSmoothing = true,

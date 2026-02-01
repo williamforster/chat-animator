@@ -308,7 +308,7 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
           radius: borderRadius,
           borderWidth: 0,
           borderColor: "#222",
-          background: "#fff",
+          background: null,
           anchorY: 0.3          // crop slightly higher than center (nice for faces)
         });
 

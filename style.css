@@ -120,6 +120,10 @@ select {
     width: 44px;
 }
 
+.removeImageButton, .imageInput {
+    width: 70px;
+}
+
 #font {
     width: 100px;
 }
