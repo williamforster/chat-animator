@@ -121,7 +121,14 @@ select {
 }
 
 .removeImageButton, .imageInput {
-    width: 70px;
+    width: 16px;
+    height: 16px;
+    /* Set the image as the background */
+    background-image: url('./images/image-icon.png');
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-size: cover;       /* Ensures the image covers the entire button area */
+    background-position: center;  /* Centers the image */
+    border-radius: 50%;
 }
 
 #font {

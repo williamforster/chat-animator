@@ -226,8 +226,8 @@ function setupTextEntry() {
         }
         
         if (allChatMessages[i].image instanceof HTMLImageElement) {
-            const removeImageButton = document.createElement('button')
-            removeImageButton.innerHTML = "x";
+            const removeImageButton = document.createElement('img')
+            removeImageButton.src = "./images/image-icon-delete.png";
             removeImageButton.addEventListener("click", (event) => {
                 chatMsg.imageInput = null;
                 chatMsg.image = null;
@@ -241,25 +241,35 @@ function setupTextEntry() {
             allChatMessages[i].textInput.disabled = true;
             allChatMessages[i].textInput.style.backgroundColor = '#ddd';
         } else {
-            const imageInput = document.createElement('input');
-            imageInput.type = "file"
+            const imageInput = document.createElement('img');
+            
+            imageInput.src = "./images/image-icon.png";
             imageInput.className = "imageInput";
-            imageInput.accept = "image/*"
             allChatMessages[i].imageInput = imageInput
             //imageInput.value = allChatMessages[i].imagePath;
-            imageInput.addEventListener("change", (event) => {
-                var chatMsgClosure = chatMsg;
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = () => {
-                    chatMsgClosure.image = new Image();
-                    chatMsgClosure.image.src = reader.result;
-                    //chatMsgClosure.textInput.disabled = true;
-                    //chatMsgClosure.textInput.style.backgroundColor = '#ddd';
-                    setupTextEntry();
-                };
-                reader.readAsDataURL(file);
+            imageInput.addEventListener("click", (event) => {
+                let chatMsgClosure = chatMsg;
+                if (window.FileReader) {
+                    // Create a file input element dynamically
+                    fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.accept = 'image/*'; // Accept only images
+                    fileInput.addEventListener('input', (event) => {
+                        const file = event.target.files[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            chatMsgClosure.image = new Image();
+                            chatMsgClosure.image.src = reader.result;
+                            //chatMsgClosure.textInput.disabled = true;
+                            //chatMsgClosure.textInput.style.backgroundColor = '#ddd';
+                            setupTextEntry();
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                    fileInput.click();
+                }
+                    
             });
             chatMessageRowDiv.appendChild(imageInput);
         }
