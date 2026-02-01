@@ -225,6 +225,30 @@ function setupTextEntry() {
             chatMessageRowDiv.appendChild(frameInput);
         }
         
+        if (allChatMessages[i].imageInput) {
+            chatMessageRowDiv.appendChild(allChatMessages[i].imageInput);
+        } else {
+            const imageInput = document.createElement('input');
+            imageInput.type = "file"
+            allChatMessages[i].imageInput = imageInput
+            //imageInput.value = allChatMessages[i].imagePath;
+            imageInput.addEventListener("change", (event) => {
+                var chatMsgClosure = chatMsg;
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    chatMsgClosure.image = new Image();
+                    chatMsgClosure.image.src = reader.result;
+                    chatMsgClosure.textInput.disabled = true;
+                    chatMsgClosure.textInput.style.backgroundColor = '#ddd';
+                };
+                reader.readAsDataURL(file);
+            });
+            chatMessageRowDiv.appendChild(imageInput);
+        }
+
+        
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = "-";
         deleteButton.className = "deleteButton";

@@ -5,8 +5,11 @@ import {AnimationSettings} from './animation.js';
  * A message string with associated profile
  */
 export class ChatMessage {
+    imageInput = null;
+    image = null;
     message = '';
     profile = '';
+    
     constructor(message, profile) {
         this.profile = profile;
         this.message = message;
@@ -17,6 +20,7 @@ export class ChatMessage {
         this.startPosition = 1.1;
         // When using frame specify, which exact frame to enter the screen on.
         this.enterFrame = 0;
+        this.image = null;
     }
     
     getMessage() {
@@ -49,6 +53,17 @@ export class ChatMessage {
         const maxWidth = animationSettings.getTextWidth(canvas);
         const heightInset = bubbleWidth * animationSettings.textInsetHeight;
         var widthRequired = 0;
+        let messageHeight = 0;
+        
+        if (this.image instanceof HTMLImageElement) {
+            const aspect = this.image.naturalHeight / this.image.naturalWidth;
+            const scaledHeight = Math.floor(aspect * bubbleWidth);
+            const maxPixelHeight = Math.floor(animationSettings.imageMaxHeight * canvas.height);
+            messageHeight = Math.min(maxPixelHeight, scaledHeight);
+            widthRequired = bubbleWidth;
+            return { widthRequired, messageHeight };
+        }
+        
         for(var n = 0; n < words.length; n++) {
             var oldWidth = ctx.measureText(line).width;
             if (oldWidth) {
@@ -77,7 +92,7 @@ export class ChatMessage {
         }
         widthRequired += 2 * widthInset;
         widthRequired = Math.floor(widthRequired);
-        var messageHeight = y + animationSettings.lineHeight + (2 * heightInset);
+        messageHeight = y + animationSettings.lineHeight + (2 * heightInset);
         //console.log(`textwidth: ${maxWidth}, maxWidth: ${maxWidth}, req:${widthRequired}`);
         return { widthRequired, messageHeight };
     }

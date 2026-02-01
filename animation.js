@@ -15,6 +15,7 @@
 
 import { gifRecord, gifRecording, recording, finishedRecording } from './recording.js';
 import {ChatMessage} from './chatMessage.js';
+import {drawImageCoverFramed} from './imageDrawing.js';
 
 var frameNumber = 0;
 var canvas = document.getElementById("animCanvas");
@@ -50,6 +51,11 @@ export class AnimationSettings {
     frameRate = 60;
     
     /**
+     * Maximum image height as a percentage of the canvas
+     */
+    imageMaxHeight = 0.8;
+    
+    /**
      * Get the width of the text bubble rectangle given the canvas width
      */
     getBubbleWidth(canvas) {
@@ -68,6 +74,7 @@ export class AnimationSettings {
     getAnimationFrameCount() {
         return Math.floor(durationMessageSlideUp * frameRate);
     }
+    
 }
 
 // Set to -1 as a reset flag for chat messages. This happens in the drawFrame function
@@ -283,22 +290,45 @@ function drawTextBubble(ctx, message, left, y, canvas, animationSettings) {
     let { widthRequired, messageHeight } = message.getSize(ctx,
                                             canvas,
                                             animationSettings);
+    //console.log(`returned width and height ${widthRequired} ${messageHeight}`);
     const borderRadius = Math.min(messageHeight / 2, animationSettings.lineHeight);
     if (!left) {
         xPos += (bubbleWidth - widthRequired);
     }
-    if (animationSettings.showTails) {
-        roundedRectWithTail(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius, left);
+    
+    if (message.image instanceof HTMLImageElement) {
+        //const mfh = Math.floor(canvas.height * animationSettings.imageMaxHeight);
+        //console.log(`MaxFrameHeight ${mfh}`);
+        // fixed width + "max height" frame:
+        drawImageCoverFramed(ctx, message.image, {
+          x: xPos,
+          y: startHeight,
+          frameWidth: bubbleWidth,
+          frameHeight: messageHeight,     // <- your max height (fixed frame height)
+          radius: borderRadius,
+          borderWidth: 0,
+          borderColor: "#222",
+          background: "#fff",
+          anchorY: 0.3          // crop slightly higher than center (nice for faces)
+        });
+
+
     } else {
-        roundedRect(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius);
+        if (animationSettings.showTails) {
+            roundedRectWithTail(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius, left);
+        } else {
+            roundedRect(ctx, xPos, startHeight, widthRequired, messageHeight, borderRadius);
+        }
+        ctx.fillStyle = message.profile.textPicker.value;
+    
+    
+        wrapTextAndDraw(ctx,
+                        message.message,
+                        xPos + textInsetWidth,
+                        startHeight + textInsetHeight,
+                        textWidth,
+                        animationSettings.lineHeight);
     }
-    ctx.fillStyle = message.profile.textPicker.value;
-    wrapTextAndDraw(ctx,
-                    message.message,
-                    xPos + textInsetWidth,
-                    startHeight + textInsetHeight,
-                    textWidth,
-                    animationSettings.lineHeight);
     
     // Draw name
     const bottomHeight = startHeight + messageHeight + yOffsetFromNames;
@@ -382,9 +412,12 @@ function getOnScreenMessagesSize(ctx, onScreenMessages, canvas, animationSetting
         let { widthRequired, messageHeight }  = msg.getSize(ctx,
                                                   canvas,
                                                   animationSettings);
-        totalSize += messageHeight;
-        totalSize += 0.5 * animationSettings.nameSizePercent * canvas.width;
+        if (messageHeight) {
+            totalSize += messageHeight;
+            totalSize += 0.5 * animationSettings.nameSizePercent * canvas.width;
+        }
     }
+    //console.log(`Total on screen message size without bubble spacing: ${totalSize}`);
     return totalSize + animationSettings.chatBubbleSpacingPixels *
             (onScreenMessages.length - 1);
 }
