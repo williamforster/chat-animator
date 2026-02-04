@@ -147,6 +147,30 @@
         </div><!-- wrapper -->
         <div id="shadow" style="z-index:-1;position:absolute;">
         </div>
+        
+        <div id="policiesDiv">
+            <a href="#" class="privacyText" onclick="
+          localStorage.removeItem('cookie_consent');
+          location.reload();
+        ">Cookie settings</a>
+        <br/>
+            <p class="privacyText">Privacy Policy</p>
+            <p class="privacyText">We use Monetag, a third-party advertising network, which may use cookies or similar technologies to display advertisements and measure performance. These cookies are only set after you provide consent.
+            You can withdraw consent at any time by clearing cookies or using the cookie settings link.</p>
+        </div>
+        
+
+        
+        <div id="cookie-banner" class="cookie-banner hidden">
+          <p>
+            We use cookies for advertising and analytics, including third-party cookies
+            from Monetag. You can accept or reject non-essential cookies.
+          </p>
+          <button id="accept-cookies">Accept</button>
+          <button id="reject-cookies">Reject</button>
+        </div>
+
+        
         <script src="./gif.js"></script>
         <script src="./gif.worker.js"></script>
         <script type="module" src="script.js"></script>
@@ -161,6 +185,55 @@
                 document.getElementById('video').play();
             </script>
         </div>-->
+        
+        <script>
+        const CONSENT_KEY = "cookie_consent"; // "accepted" | "rejected"
+
+        function hasConsent() {
+          return localStorage.getItem(CONSENT_KEY) === "accepted";
+        }
+
+        function showBannerIfNeeded() {
+          if (!localStorage.getItem(CONSENT_KEY)) {
+            document.getElementById("cookie-banner").classList.remove("hidden");
+          }
+        }
+
+        function acceptCookies() {
+          localStorage.setItem(CONSENT_KEY, "accepted");
+          document.getElementById("cookie-banner").classList.add("hidden");
+          loadMonetag();
+        }
+
+        function rejectCookies() {
+          localStorage.setItem(CONSENT_KEY, "rejected");
+          document.getElementById("cookie-banner").classList.add("hidden");
+        }
+
+        // Attach handlers
+        document.getElementById("accept-cookies").onclick = acceptCookies;
+        document.getElementById("reject-cookies").onclick = rejectCookies;
+
+        // Run on load
+        document.addEventListener("DOMContentLoaded", () => {
+          showBannerIfNeeded();
+          if (hasConsent()) {
+            loadMonetag();
+          }
+        });
+        </script>
+        <script>
+        function loadMonetag() {
+          if (window.monetagLoaded) return;
+          window.monetagLoaded = true;
+
+          const script = document.createElement("script");
+          script.src = "./monetag.js"; // Monetag-provided URL
+          script.async = true;
+          document.head.appendChild(script);
+        }
+        </script>
+
     </body>
 </html>
 
