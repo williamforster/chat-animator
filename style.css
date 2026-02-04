@@ -6,7 +6,7 @@
 body {
     background: rgb(255,255,255);
     background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 7%, rgba(153,153,153,1) 100%);
-    padding: 0 40px 80px 40px;
+    padding: 0;
 }
 
 h1 {
@@ -293,4 +293,34 @@ input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb
     .messageRowDiv {
         justify-content: center;
     }
+}
+
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #111;
+  color: #fff;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.hidden {
+  display: none;
+}
+
+#policiesDiv {
+    width: 100%;
+    background-color: black;
+}
+
+.privacyText {
+    font-size: 8px;
+    color: #ccc;
 }
