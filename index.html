@@ -188,25 +188,31 @@
         
         <script>
         const CONSENT_KEY = "cookie_consent"; // "accepted" | "rejected"
+        const CONSENT_TIME_KEY = "cookie_consent_time";
 
         function hasConsent() {
           return localStorage.getItem(CONSENT_KEY) === "accepted";
         }
 
         function showBannerIfNeeded() {
-          if (!localStorage.getItem(CONSENT_KEY)) {
+          const consentString = localStorage.getItem(CONSENT_KEY);
+          const consentTime = localStorage.getItem(CONSENT_TIME_KEY);
+          if (!consentString ||
+              (consentString === "rejected" && consentTime != null && Date.now() - parseInt(consentTime) > 24 * 60 * 60 * 1000)) {
             document.getElementById("cookie-banner").classList.remove("hidden");
           }
         }
 
         function acceptCookies() {
           localStorage.setItem(CONSENT_KEY, "accepted");
+          localStorage.setItem(CONSENT_TIME_KEY, Date.now().toString());
           document.getElementById("cookie-banner").classList.add("hidden");
           loadMonetag();
         }
 
         function rejectCookies() {
           localStorage.setItem(CONSENT_KEY, "rejected");
+          localStorage.setItem(CONSENT_TIME_KEY, Date.now().toString());
           document.getElementById("cookie-banner").classList.add("hidden");
         }
 
