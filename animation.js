@@ -20,6 +20,12 @@ import {drawImageCoverFramed} from './imageDrawing.js';
 var frameNumber = 0;
 var canvas = document.getElementById("animCanvas");
 
+const darkModeIconsImage = new Image();
+darkModeIconsImage.src = "./images/paint-icons-dark-mode.png";
+const lightModeIconsImage = new Image();
+lightModeIconsImage.src = "./images/paint-icons-light-mode.png";
+
+
 export class AnimationSettings {
     // How long the messages should spend sliding onto the screen
     durationMessageSlideUp = 0.5;
@@ -126,6 +132,7 @@ export function drawFrame(allChatMessages, animationSettings) {
     // Calculate the desired position of each bubble and the actual position of each bubble
     layout(ctx, onScreenMessages, canvas, animationSettings);
     drawAllTextBubbles(ctx, onScreenMessages, canvas, animationSettings);
+    drawTopIcons(ctx, canvas, animationSettings);
     
     if (gifRecording) {
         gifRecord.addFrame(canvas, {copy: true, delay: 1000 / animationSettings.frameRate});
@@ -615,4 +622,43 @@ function drawPicture(ctx, message, bottomHeight, canvas, animationSettings) {
         // The last element's alpha channel doesn't work without this hacky line ???
         ctx.beginPath();
     }
+}
+
+/**
+ * Draw the icons and time at the top like wifi, battery
+ */
+function drawTopIcons(ctx, canvas, animationSettings) {
+    const slider = document.getElementById("topIcons");
+    const timeText = document.getElementById("fakeTime");
+    if (slider.value < 0.01) {
+        return;
+    }
+    var drawColor = "#ffffff";
+    var imageToDraw = darkModeIconsImage;
+    if (slider.value < 1.01) {
+        drawColor = "#000000";
+        imageToDraw = lightModeIconsImage;
+    }
+    
+    const size = 0.3; // size as fraction of the canvas width
+    const paddingTop = 20;
+    const paddingRight = 40;
+    const paddingLeft = paddingRight;
+    
+    const widthPixels = size * canvas.width;
+    const scale = widthPixels / imageToDraw.width;
+    
+    
+    ctx.drawImage(imageToDraw,
+                  canvas.width - paddingRight - widthPixels,
+                  paddingTop,
+                  widthPixels,
+                  scale * imageToDraw.height);
+    
+    ctx.font = (scale * 0.8 * imageToDraw.height).toString() + "px sans-serif";
+    ctx.fillStyle = drawColor;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(timeText.value, paddingLeft, paddingTop + scale * imageToDraw.height);
+                  
 }
